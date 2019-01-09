@@ -1,0 +1,37 @@
+<idea-plugin>
+    <id>com.hsiaosiyuan.idea.ont</id>
+    <name>Ontology</name>
+    <vendor email="hsiaosiyuan0@outlook.com" url="https://github.com/hsiaosiyuan0">hsiaosiyuan</vendor>
+
+    <description><![CDATA[
+    Plugin for Ontology Smart Contract Development
+    ]]></description>
+
+    <depends optional="true">PythonCore</depends> <!-- Python plugin CE -->
+    <depends optional="true">Pythonid</depends> <!-- Python plugin -->
+    <depends optional="true">com.intellij.modules.python</depends> <!-- PyCharm -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <sdkType implementation="com.hsiaosiyuan.idea.ont.sdk.OntSdkType"/>
+        <moduleType id="ONTOLOGY_MODULE" implementationClass="com.hsiaosiyuan.idea.ont.module.OntModuleType"/>
+        <projectStructureDetector implementation="com.hsiaosiyuan.idea.ont.module.OntProjectStructureDetector"/>
+        <applicationService serviceInterface="com.hsiaosiyuan.idea.ont.sdk.OntSdkSettings"
+                            serviceImplementation="com.hsiaosiyuan.idea.ont.sdk.OntSdkSettings"/>
+
+        <toolWindow id="Ontology"
+                    anchor="bottom"
+                    icon="/icons/ontology.png"
+                    canCloseContents="true"
+                    secondary="false"
+                    factoryClass="com.hsiaosiyuan.idea.ont.ui.OntConsoleToolWindowFactory"/>
+    </extensions>
+
+    <actions>
+        <action id="com.hsiaosiyuan.action.CompileAction"
+                class="com.hsiaosiyuan.idea.ont.run.OntCompileAction"
+                text="Compile contracts"
+                description="Compile ontology smart contracts">
+            <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>

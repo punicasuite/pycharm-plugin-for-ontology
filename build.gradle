@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.1'
+}
+
+group 'com.hsiaosiyuan.idea'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile('com.alibaba:fastjson:1.2.54')
+    compile("org.kurento:kurento-jsonrpc-client:6.9.0") {
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+}
+
+intellij {
+    version '2018.3.2'
+    plugins = ['Pythonid:2018.3.183.4886.37', 'PythonCore:2018.3.183.4886.37']
+}
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
