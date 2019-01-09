@@ -1,5 +1,9 @@
 package com.hsiaosiyuan.idea.ont.punica;
 
+import com.github.ontio.OntSdk;
+import com.github.ontio.network.exception.ConnectorException;
+import com.github.ontio.network.exception.RpcException;
+import com.github.ontio.sdk.exception.SDKException;
 import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
 import com.hsiaosiyuan.idea.ont.ui.OntConsoleToolWindowFactory;
 import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
@@ -137,5 +141,19 @@ public class OntPunica {
     consoleView.attachToProcess(osProcessHandler);
 
     osProcessHandler.startNotify();
+  }
+
+  public static boolean isContractDeployed(String rpcAddress, String codeHash) throws SDKException, ConnectorException, IOException {
+    OntSdk sdk = OntSdk.getInstance();
+    sdk.setRpc(rpcAddress);
+    try {
+      sdk.getRpc().getContract(codeHash);
+    } catch (RpcException e) {
+      if (e.getMessage().contains("unknow contract") || e.getMessage().contains("unknow contracts")) {
+        return false;
+      }
+      throw e;
+    }
+    return true;
   }
 }
