@@ -2,6 +2,7 @@ package com.hsiaosiyuan.idea.ont.deploy;
 
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
+import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -21,6 +22,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
   private JTextField txEmail;
   private JTextField txDesc;
   private JComboBox cbPayer;
+  private JComboBox cbNetworks;
 
   private Project project;
 
@@ -41,6 +43,11 @@ public class OntDeployConfigDialog extends DialogWrapper {
     for (Map.Entry<String, Object> item : OntPunicaConfig.getInstance(project).password.entrySet()) {
       cbPayer.addItem(new Item(item.getKey(), item.getKey()));
     }
+    cbPayer.setSelectedItem(new Item(config.payer, config.payer));
+
+    OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
+    netCfg.networks.keySet().forEach(k -> cbNetworks.addItem(new Item(k, k)));
+    cbNetworks.setSelectedItem(new Item(netCfg.defaultNetwork, netCfg.defaultNetwork));
   }
 
   @Nullable
@@ -62,6 +69,10 @@ public class OntDeployConfigDialog extends DialogWrapper {
       config.desc = txDesc.getText().trim();
       config.payer = ((Item) Objects.requireNonNull(cbPayer.getSelectedItem())).getId();
       config.save();
+
+      OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
+      netCfg.defaultNetwork = ((Item) Objects.requireNonNull(cbNetworks.getSelectedItem())).getId();
+      netCfg.save();
     } catch (IOException e) {
       OntNotifier notifier = OntNotifier.getInstance(project);
       notifier.notifyError("Ontology", "Unable to save config: " + e.getMessage());
@@ -88,6 +99,13 @@ public class OntDeployConfigDialog extends DialogWrapper {
     @Override
     public String toString() {
       return description;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof Item)) return super.equals(obj);
+
+      return ((Item) obj).getId().equals(id);
     }
   }
 }

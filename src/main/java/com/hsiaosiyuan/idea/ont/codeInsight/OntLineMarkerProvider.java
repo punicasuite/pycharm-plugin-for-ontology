@@ -1,14 +1,10 @@
 package com.hsiaosiyuan.idea.ont.codeInsight;
 
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
-import com.hsiaosiyuan.idea.ont.run.OntCompileAction;
 import com.hsiaosiyuan.idea.ont.run.OntRunAction;
-import com.hsiaosiyuan.idea.ont.run.OntRunContextAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
-import com.intellij.execution.actions.RunContextAction;
-import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;

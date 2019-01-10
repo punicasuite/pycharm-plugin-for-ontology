@@ -110,7 +110,7 @@ public class OntPunica {
     return commandLine;
   }
 
-  public static void startCmProcess(GeneralCommandLine cmd, Project project, @Nullable Consumer<ProcessEvent> onTerminated) {
+  public static void startCmdProcess(GeneralCommandLine cmd, Project project, @Nullable Consumer<ProcessEvent> onTerminated) {
     OntNotifier notifier = OntNotifier.getInstance(project);
     OSProcessHandler osProcessHandler;
     try {

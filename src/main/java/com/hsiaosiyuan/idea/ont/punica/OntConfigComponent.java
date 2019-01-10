@@ -1,6 +1,7 @@
 package com.hsiaosiyuan.idea.ont.punica;
 
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
+import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
@@ -55,6 +56,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     try {
       reloadConfig(evt);
       reloadDeployConfig(evt);
+      reloadNetworkConfig(evt);
     } catch (IOException e) {
       notifier.notifyError("Ontology", "Unable to reload config: " + e.getMessage());
     }
@@ -78,6 +80,16 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     if (!path.toString().equals(evt.getPath())) return;
 
     OntDeployConfig.getInstance(project).load();
+  }
+
+  private void reloadNetworkConfig(VFileEvent evt) throws IOException {
+    Project project = getProjectByFile(evt.getFile());
+    if (project == null) return;
+
+    Path path = OntNetworkConfig.getInstance(project).getFilePath();
+    if (!path.toString().equals(evt.getPath())) return;
+
+    OntNetworkConfig.getInstance(project).load();
   }
 
   @Nullable

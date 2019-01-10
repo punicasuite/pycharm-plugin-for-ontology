@@ -2,6 +2,7 @@ package com.hsiaosiyuan.idea.ont.punica;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +35,7 @@ public class OntPunicaConfig {
     return inst;
   }
 
+  @JSONField(serialize = false)
   public Path getFilePath() {
     return Paths.get(Objects.requireNonNull(project.getBasePath()))
         .resolve("./contracts/" + FILENAME).normalize();

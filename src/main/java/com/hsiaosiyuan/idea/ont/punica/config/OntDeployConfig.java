@@ -2,11 +2,12 @@ package com.hsiaosiyuan.idea.ont.punica.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.github.ontio.OntSdk;
+import com.github.ontio.account.Account;
 import com.github.ontio.common.Helper;
 import com.github.ontio.core.transaction.Transaction;
-import com.github.ontio.sdk.exception.SDKException;
-import com.hsiaosiyuan.idea.ont.run.OntRunConfigurationOptions;
+import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +31,9 @@ public class OntDeployConfig {
   public Integer gasPrice;
   public Integer gasLimit;
 
+  @JSONField(serialize = false)
+  public JSONObject password;
+
   private Project project;
 
   public static OntDeployConfig getInstance(Project project) throws IOException {
@@ -51,47 +55,55 @@ public class OntDeployConfig {
         .resolve("./contracts/" + FILENAME).normalize();
   }
 
+  @JSONField(serialize = false)
   public byte[] getRaw() throws IOException {
     Path file = getFilePath();
     return Files.readAllBytes(file);
   }
 
   public void load() throws IOException {
-    JSONObject obj = JSON.parseObject(new String(getRaw())).getJSONObject("deployConfig");
-    name = obj.getString("name");
-    version = obj.getString("version");
-    author = obj.getString("author");
-    email = obj.getString("email");
-    desc = obj.getString("desc");
-    needStorage = obj.getBoolean("needStorage");
-    payer = obj.getString("payer");
-    gasPrice = obj.getInteger("gasPrice");
-    gasLimit = obj.getInteger("gasLimit");
+    JSONObject obj = JSON.parseObject(new String(getRaw()));
+
+    JSONObject deploy = obj.getJSONObject("deployConfig");
+    name = deploy.getString("name");
+    version = deploy.getString("version");
+    author = deploy.getString("author");
+    email = deploy.getString("email");
+    desc = deploy.getString("desc");
+    needStorage = deploy.getBoolean("needStorage");
+    payer = deploy.getString("payer");
+    gasPrice = deploy.getInteger("gasPrice");
+    gasLimit = deploy.getInteger("gasLimit");
+
+    password = obj.getJSONObject("password");
   }
 
   public void save() throws IOException {
     JSONObject obj = JSON.parseObject(new String(getRaw()));
     obj.put("deployConfig", this);
+    obj.put("password", password);
     String raw = JSON.toJSONString(obj, true);
     Files.write(getFilePath(), raw.getBytes());
+  }
+
+  @Nullable
+  public String getPwd(String acc) {
+    return password.getString(acc);
   }
 
   public void deploy(String code) throws Exception {
     OntSdk sdk = OntSdk.getInstance();
 
-    OntRunConfigurationOptions cfg = OntRunConfigurationOptions.getInstance(project);
-    assert cfg != null;
+    OntNetworkConfig networkConfig = OntNetworkConfig.getInstance(project);
+    sdk.setRpc(networkConfig.getRpcAddr());
 
-//    sdk.openWalletFile();
-
-    sdk.setRpc(cfg.getRpcAddr());
-
-
+    OntPunicaConfig punicaConfig = OntPunicaConfig.getInstance(project);
+    sdk.openWalletFile(punicaConfig.getWalletPath().toString());
 
     Transaction tx = sdk.vm().makeDeployCodeTransaction(
         code, needStorage, name, version, author, email, desc, payer, gasLimit, gasPrice);
 
-//    sdk.signTx(tx, payer)
+    sdk.signTx(tx, new Account[][]{{sdk.getWalletMgr().getAccount(payer, getPwd(payer))}});
     String txHex = Helper.toHexString(tx.toArray());
     sdk.getRpc().syncSendRawTransaction(txHex);
   }

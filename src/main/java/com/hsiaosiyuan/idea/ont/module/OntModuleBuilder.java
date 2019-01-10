@@ -76,7 +76,7 @@ public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderList
     sm.down();
     copyTemp2Project(sm, tmpWorkDir, module);
 
-    OntPunica.startCmProcess(initCmd, project, evt -> sm.up());
+    OntPunica.startCmdProcess(initCmd, project, evt -> sm.up());
   }
 
   private void copyTemp2Project(Semaphore sm, Path tmpWorkDir, Module module) {

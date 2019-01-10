@@ -31,7 +31,7 @@ public class OntCompileAction extends AnAction {
 
     GeneralCommandLine cmd = OntPunicaFactory.create().makeCompileCmd(project.getBasePath(), file.getPath());
 
-    OntPunica.startCmProcess(cmd, project, evt -> {
+    OntPunica.startCmdProcess(cmd, project, evt -> {
       ApplicationManager.getApplication().invokeLater(() -> {
         VirtualFileManager.getInstance().refreshWithoutFileWatcher(false);
       });

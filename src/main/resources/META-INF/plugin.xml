@@ -37,8 +37,6 @@
         <projectService serviceInterface="com.hsiaosiyuan.idea.ont.ui.OntNotifier"
                         serviceImplementation="com.hsiaosiyuan.idea.ont.ui.OntNotifier"/>
 
-        <configurationType implementation="com.hsiaosiyuan.idea.ont.run.OntConfigurationType"/>
-        <runConfigurationProducer implementation="com.hsiaosiyuan.idea.ont.run.OntRunConfigurationProducer"/>
     </extensions>
 
     <actions>
