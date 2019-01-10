@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class OntRunAction extends AnAction {
@@ -58,7 +59,10 @@ public class OntRunAction extends AnAction {
 
     OntDeployConfigDialog dialog;
     try {
-      dialog = new OntDeployConfigDialog(project);
+      Path path = Paths.get(src);
+      String filename = path.getFileName().toString();
+      filename = filename.substring(0, filename.length() - 3);
+      dialog = new OntDeployConfigDialog(project, filename);
     } catch (IOException e1) {
       notifier.notifyError("Ontology", "Unable to load config: " + e1.getMessage());
       return -1;

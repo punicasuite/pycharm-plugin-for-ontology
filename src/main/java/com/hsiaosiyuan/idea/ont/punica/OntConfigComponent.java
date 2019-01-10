@@ -66,6 +66,8 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
 
+    if(project.isDisposed()) return;
+
     Path path = OntPunicaConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;
 
@@ -76,6 +78,8 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
 
+    if(project.isDisposed()) return;
+
     Path path = OntDeployConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;
 
@@ -85,6 +89,8 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
   private void reloadNetworkConfig(VFileEvent evt) throws IOException {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
+
+    if(project.isDisposed()) return;
 
     Path path = OntNetworkConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;

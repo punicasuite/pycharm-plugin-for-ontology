@@ -37,16 +37,12 @@ public class OntDeployConfig {
   private Project project;
 
   public static OntDeployConfig getInstance(Project project) throws IOException {
-    if (inst != null) return inst;
+    if (inst == null) {
+      inst = new OntDeployConfig();
+    }
 
-    inst = new OntDeployConfig();
     inst.project = project;
     inst.load();
-    return inst;
-  }
-
-  @Nullable
-  public static OntDeployConfig getInstance() {
     return inst;
   }
 

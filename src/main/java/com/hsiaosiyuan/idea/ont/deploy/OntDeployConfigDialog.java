@@ -9,6 +9,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
@@ -27,11 +28,12 @@ public class OntDeployConfigDialog extends DialogWrapper {
   private Project project;
 
   @SuppressWarnings("unchecked")
-  public OntDeployConfigDialog(@Nullable Project project) throws IOException {
+  public OntDeployConfigDialog(@Nullable Project project, String fileName) throws IOException {
     super(project);
     init();
 
     this.project = project;
+    ((TitledBorder) panel.getBorder()).setTitle("Deploy Contract: " + fileName);
 
     OntDeployConfig config = OntDeployConfig.getInstance(project);
     txName.setText(config.name);

@@ -22,16 +22,12 @@ public class OntNetworkConfig {
   private Project project;
 
   public static OntNetworkConfig getInstance(Project project) throws IOException {
-    if (inst != null) return inst;
+    if (inst == null) {
+      inst = new OntNetworkConfig();
+    }
 
-    inst = new OntNetworkConfig();
     inst.project = project;
     inst.load();
-    return inst;
-  }
-
-  @Nullable
-  public static OntNetworkConfig getInstance() {
     return inst;
   }
 

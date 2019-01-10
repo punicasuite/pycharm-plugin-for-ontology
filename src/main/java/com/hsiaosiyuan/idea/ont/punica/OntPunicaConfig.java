@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,16 +21,12 @@ public class OntPunicaConfig {
   public JSONObject password;
 
   public static OntPunicaConfig getInstance(Project project) throws IOException {
-    if (inst != null) return inst;
+    if (inst == null) {
+      inst = new OntPunicaConfig();
+    }
 
-    inst = new OntPunicaConfig();
     inst.project = project;
     inst.load();
-    return inst;
-  }
-
-  @Nullable
-  public static OntPunicaConfig getInstance() {
     return inst;
   }
 
