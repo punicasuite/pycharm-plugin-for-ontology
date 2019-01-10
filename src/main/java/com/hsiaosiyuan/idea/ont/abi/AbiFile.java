@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,5 +68,24 @@ public class AbiFile {
 
   public boolean hasFn(String fn) {
     return functions.stream().anyMatch((f) -> f.name.equals(fn));
+  }
+
+  public void destroy() {
+    AbiIndexManager.getInstance().src2abi.remove(srcPath);
+    deleteFiles();
+  }
+
+  public void deleteFiles() {
+    deleteAbiFile();
+    deleteAvmFile();
+  }
+
+  public void deleteAbiFile() {
+    new File(selfPath).delete();
+  }
+
+  public void deleteAvmFile() {
+    String src = abiPath2SrcPath(selfPath);
+    new File(srcPath2AvmPath(src)).delete();
   }
 }
