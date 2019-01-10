@@ -6,7 +6,6 @@ import com.hsiaosiyuan.idea.ont.deploy.OntDeployConfigDialog;
 import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
-import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class OntRunAction extends AnAction { 
+public class OntRunAction extends AnAction {
   private String src;
 
   public OntRunAction(String src) {

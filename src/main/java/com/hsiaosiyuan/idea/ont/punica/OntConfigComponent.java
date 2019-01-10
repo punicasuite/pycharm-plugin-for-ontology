@@ -2,7 +2,7 @@ package com.hsiaosiyuan.idea.ont.punica;
 
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
-import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
+import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;

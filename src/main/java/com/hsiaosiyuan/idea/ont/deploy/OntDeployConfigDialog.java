@@ -3,7 +3,7 @@ package com.hsiaosiyuan.idea.ont.deploy;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
-import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
+import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.Nullable;

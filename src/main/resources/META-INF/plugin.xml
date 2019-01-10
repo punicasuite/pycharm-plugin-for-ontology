@@ -32,13 +32,13 @@
                     icon="/icons/ontology.png"
                     canCloseContents="true"
                     secondary="false"
-                    factoryClass="com.hsiaosiyuan.idea.ont.ui.OntConsoleToolWindowFactory"/>
+                    factoryClass="com.hsiaosiyuan.idea.ont.run.OntConsoleToolWindowFactory"/>
 
         <codeInsight.lineMarkerProvider language=""
                                         implementationClass="com.hsiaosiyuan.idea.ont.codeInsight.OntLineMarkerProvider"/>
 
-        <projectService serviceInterface="com.hsiaosiyuan.idea.ont.ui.OntNotifier"
-                        serviceImplementation="com.hsiaosiyuan.idea.ont.ui.OntNotifier"/>
+        <projectService serviceInterface="com.hsiaosiyuan.idea.ont.run.OntNotifier"
+                        serviceImplementation="com.hsiaosiyuan.idea.ont.run.OntNotifier"/>
 
     </extensions>
 

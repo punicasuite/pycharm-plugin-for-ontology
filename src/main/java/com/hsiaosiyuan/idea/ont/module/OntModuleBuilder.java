@@ -4,7 +4,7 @@ import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaFactory;
 import com.hsiaosiyuan.idea.ont.sdk.OntSdkSettingsStep;
 import com.hsiaosiyuan.idea.ont.sdk.OntSdkType;
-import com.hsiaosiyuan.idea.ont.ui.OntNotifier;
+import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;

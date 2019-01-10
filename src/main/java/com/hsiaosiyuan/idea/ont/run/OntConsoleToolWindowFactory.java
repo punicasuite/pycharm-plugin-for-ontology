@@ -1,4 +1,4 @@
-package com.hsiaosiyuan.idea.ont.ui;
+package com.hsiaosiyuan.idea.ont.run;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
