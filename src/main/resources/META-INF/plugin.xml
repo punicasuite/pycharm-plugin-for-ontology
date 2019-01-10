@@ -11,6 +11,12 @@
     <depends optional="true">Pythonid</depends> <!-- Python plugin -->
     <depends optional="true">com.intellij.modules.python</depends> <!-- PyCharm -->
 
+    <project-components>
+        <component>
+            <implementation-class>com.hsiaosiyuan.idea.ont.punica.OntConfigComponent</implementation-class>
+        </component>
+    </project-components>
+
     <extensions defaultExtensionNs="com.intellij">
         <sdkType implementation="com.hsiaosiyuan.idea.ont.sdk.OntSdkType"/>
         <moduleType id="ONTOLOGY_MODULE" implementationClass="com.hsiaosiyuan.idea.ont.module.OntModuleType"/>

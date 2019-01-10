@@ -48,6 +48,13 @@ public class AbiFile {
     return Paths.get(abiPath).getParent().resolve("../" + filename + ".py").normalize().toString();
   }
 
+  public static String srcPath2AvmPath(String srcPath) {
+    Path path = Paths.get(srcPath);
+    String filename = path.getFileName().toString();
+    filename = filename.substring(0, filename.length() - 3);
+    return Paths.get(srcPath).getParent().resolve("./build/" + filename + ".avm").normalize().toString();
+  }
+
   @JSONField(serialize = false)
   public String getSelfPath() {
     return selfPath;

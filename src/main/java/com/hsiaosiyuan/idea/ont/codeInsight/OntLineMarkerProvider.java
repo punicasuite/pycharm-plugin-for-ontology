@@ -1,6 +1,8 @@
 package com.hsiaosiyuan.idea.ont.codeInsight;
 
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
+import com.hsiaosiyuan.idea.ont.run.OntCompileAction;
+import com.hsiaosiyuan.idea.ont.run.OntRunAction;
 import com.hsiaosiyuan.idea.ont.run.OntRunContextAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -63,7 +65,7 @@ public class OntLineMarkerProvider implements LineMarkerProvider {
 
     }).forEach((element) -> {
 
-      final RunContextAction runAction = new OntRunContextAction(DefaultRunExecutor.getRunExecutorInstance());
+      final AnAction runAction = new OntRunAction(element.getContainingFile().getVirtualFile().getPath());
 
       SmartPsiElementPointer<PsiElement> smp = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
 //      final RunContextAction debugAction = new OdRunContextAction(OdDebugExecutor.getInstance(smp));

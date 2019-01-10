@@ -21,7 +21,7 @@ public class OntRunConfiguration extends LocatableConfigurationBase {
 
   public OntRunConfiguration(@NotNull Project project, @NotNull ConfigurationFactory factory, String s) {
     super(project, factory, s);
-    options = OntRunConfigurationOptions.singleton(project);
+    options = OntRunConfigurationOptions.getInstance(project);
   }
 
   @NotNull
@@ -39,7 +39,7 @@ public class OntRunConfiguration extends LocatableConfigurationBase {
   @Override
   public void readExternal(@NotNull Element element) throws InvalidDataException {
     super.readExternal(element);
-    options = OntRunConfigurationOptions.singleton(getProject());
+    options = OntRunConfigurationOptions.getInstance(getProject());
   }
 
   @Override

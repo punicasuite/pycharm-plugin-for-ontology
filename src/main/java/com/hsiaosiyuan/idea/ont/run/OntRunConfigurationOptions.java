@@ -1,6 +1,7 @@
 package com.hsiaosiyuan.idea.ont.run;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.hsiaosiyuan.idea.ont.module.OntProjectStructureDetector;
 import com.hsiaosiyuan.idea.ont.run.option.Network;
 import com.intellij.openapi.project.Project;
@@ -23,7 +24,7 @@ public class OntRunConfigurationOptions {
   private static OntRunConfigurationOptions instance = null;
 
   @Nullable
-  public static OntRunConfigurationOptions singleton(Project project) {
+  public static OntRunConfigurationOptions getInstance(Project project) {
     if (instance != null) return instance;
 
     try {
@@ -57,6 +58,7 @@ public class OntRunConfigurationOptions {
   }
 
   @Nullable
+  @JSONField(serialize = false)
   public String getRpcAddr() {
     Network network = networks.get(defaultNetwork);
     if (network == null) return null;

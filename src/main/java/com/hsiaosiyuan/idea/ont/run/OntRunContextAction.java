@@ -16,6 +16,7 @@ import com.intellij.execution.runners.ExecutionUtil;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class OntRunContextAction extends RunContextAction {
@@ -58,26 +59,36 @@ public class OntRunContextAction extends RunContextAction {
 
     String srcAbs = element.getContainingFile().getVirtualFile().getPath();
 
-    OntRunConfigurationOptions cfg = OntRunConfigurationOptions.singleton(context.getProject());
+    OntRunConfigurationOptions cfg = OntRunConfigurationOptions.getInstance(context.getProject());
     assert cfg != null;
+
+    OntNotifier notifier = OntNotifier.getInstance(context.getProject());
     String rpcAddr = cfg.getRpcAddr();
-    if (rpcAddr == null) return;
+    if (rpcAddr == null) {
+      notifier.notifyError("Ontology Error", "Unable to retrieve RPC address");
+      return;
+    }
 
     AbiIndexManager abiIndexManager = AbiIndexManager.getInstance();
     AbiFile abiFile = abiIndexManager.src2abi.get(srcAbs);
     assert abiFile != null;
 
     boolean isDeployed;
-    OntNotifier notifier = OntNotifier.getInstance(context.getProject());
     try {
       isDeployed = OntPunica.isContractDeployed(rpcAddr, abiFile.hash);
     } catch (Exception e) {
-      notifier.notifyError("Unable to check contract state", e.getMessage());
+      notifier.notifyError("Ontology Error", "Unable to check contract state: " + e.getMessage());
       return;
     }
 
     if (!isDeployed) {
-      OntDeployConfigDialog dialog = new OntDeployConfigDialog(context.getProject());
+      OntDeployConfigDialog dialog;
+      try {
+        dialog = new OntDeployConfigDialog(context.getProject());
+      } catch (IOException e) {
+        notifier.notifyError("Ontology", "Unable to load config: " + e.getMessage());
+        return;
+      }
       if (!dialog.showAndGet()) return;
     }
 
