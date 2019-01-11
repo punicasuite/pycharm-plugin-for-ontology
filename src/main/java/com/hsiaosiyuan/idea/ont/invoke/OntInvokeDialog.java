@@ -4,7 +4,6 @@ import com.github.ontio.sdk.exception.SDKException;
 import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
 import com.github.ontio.smartcontract.neovm.abi.Parameter;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
-import com.hsiaosiyuan.idea.ont.abi.AbiFn;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -18,7 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OntInvokeDialog extends DialogWrapper {
