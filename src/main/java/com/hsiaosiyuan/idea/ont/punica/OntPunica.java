@@ -116,7 +116,7 @@ public class OntPunica {
     try {
       osProcessHandler = new OntRunCmdHandler(cmd.createProcess(), cmd.getCommandLineString());
     } catch (ExecutionException err) {
-      notifier.notifyError("Punica Error", err.getMessage());
+      notifier.notifyError("Punica Error", err);
       return;
     }
 

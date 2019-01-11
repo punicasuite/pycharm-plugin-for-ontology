@@ -7,6 +7,9 @@ import com.intellij.openapi.util.text.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 public class OntNotifier {
   public static final NotificationGroup NOTIFICATION_GROUP_ID = NotificationGroup.toolWindowGroup(
       "Ontology Messages", OntConsoleToolWindowFactory.ID);
@@ -76,6 +79,18 @@ public class OntNotifier {
   @NotNull
   public Notification notifyError(@NotNull String title, @NotNull String message) {
     return notifyError(title, message, (NotificationListener) null);
+  }
+
+  @NotNull
+  public Notification notifyError(@NotNull String title, @NotNull Exception e) {
+    String msg = e.getMessage();
+    if (msg == null) {
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      e.printStackTrace(pw);
+      msg = sw.toString();
+    }
+    return notifyError(title, msg, (NotificationListener) null);
   }
 
   @NotNull

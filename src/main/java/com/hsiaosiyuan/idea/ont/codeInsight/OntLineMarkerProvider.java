@@ -61,7 +61,7 @@ public class OntLineMarkerProvider implements LineMarkerProvider {
 
     }).forEach((element) -> {
 
-      final AnAction runAction = new OntRunAction(element.getContainingFile().getVirtualFile().getPath());
+      final AnAction runAction = new OntRunAction(element.getContainingFile().getVirtualFile().getPath(), element.getText());
 
       SmartPsiElementPointer<PsiElement> smp = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
 //      final RunContextAction debugAction = new OdRunContextAction(OdDebugExecutor.getInstance(smp));

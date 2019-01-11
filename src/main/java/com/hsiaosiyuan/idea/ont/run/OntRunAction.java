@@ -1,8 +1,15 @@
 package com.hsiaosiyuan.idea.ont.run;
 
+import com.alibaba.fastjson.JSONObject;
+import com.github.ontio.common.Helper;
+import com.github.ontio.sdk.exception.SDKException;
+import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
+import com.github.ontio.smartcontract.neovm.abi.BuildParams;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
 import com.hsiaosiyuan.idea.ont.deploy.OntDeployConfigDialog;
+import com.hsiaosiyuan.idea.ont.invoke.OntFnParameter;
+import com.hsiaosiyuan.idea.ont.invoke.OntInvokeDialog;
 import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
@@ -18,10 +25,12 @@ import java.nio.file.Paths;
 
 public class OntRunAction extends AnAction {
   private String src;
+  private String method;
 
-  public OntRunAction(String src) {
+  public OntRunAction(String src, String method) {
     super();
     this.src = src;
+    this.method = method;
   }
 
   @Override
@@ -32,7 +41,34 @@ public class OntRunAction extends AnAction {
     int state = tryDoDeployIfNeeded(project);
     if (state <= 0) return;
 
-    System.out.println("Invoke");
+    OntNotifier notifier = OntNotifier.getInstance(project);
+
+    OntInvokeDialog invokeDialog;
+    try {
+      invokeDialog = new OntInvokeDialog(project, src, method);
+    } catch (Exception e1) {
+      notifier.notifyError("Ontology", e1);
+      return;
+    }
+
+    if (!invokeDialog.showAndGet()) return;
+
+    AbiFunction fn;
+    try {
+      fn = invokeDialog.getFn();
+    } catch (Exception e1) {
+      notifier.notifyError("Ontology", e1);
+      return;
+    }
+
+    AbiFile abiFile = AbiIndexManager.getInstance().src2abi.get(src);
+    try {
+      // TODO:: run in background progress and display exec result into the bottom tool window
+      JSONObject resp = (JSONObject) OntDeployConfig.getInstance(project).invoke(abiFile.hash, fn, true, false);
+      System.out.println(resp);
+    } catch (Exception e1) {
+      notifier.notifyError("Ontology", e1);
+    }
   }
 
   public int tryDoDeployIfNeeded(Project project) {

@@ -2,6 +2,8 @@ package com.hsiaosiyuan.idea.ont.abi;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
+import com.github.ontio.smartcontract.neovm.abi.AbiInfo;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -15,10 +17,12 @@ public class AbiFile {
   public String CompilerVersion;
   public String hash;
   public String entrypoint;
-  public ArrayList<AbiFunction> functions;
+  public ArrayList<AbiFn> functions;
 
   private String selfPath;
   private String srcPath;
+
+  private AbiInfo abiInfo = null;
 
   public static boolean isAbiFile(String file) {
     Path path = Paths.get(file);
@@ -87,5 +91,19 @@ public class AbiFile {
   public void deleteAvmFile() {
     String src = abiPath2SrcPath(selfPath);
     new File(srcPath2AvmPath(src)).delete();
+  }
+
+  @Nullable
+  public AbiFunction getFn(String name) {
+    if (abiInfo != null) return abiInfo.getFunction(name);
+
+    try {
+      byte[] raw = Files.readAllBytes(Paths.get(selfPath));
+      abiInfo = JSON.parseObject(raw, AbiInfo.class);
+      return  abiInfo.getFunction(name);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }
