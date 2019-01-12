@@ -80,8 +80,6 @@ public class OntFnParameter implements ItemListener {
     rbTrue.setVisible(false);
     rbFalse.setVisible(false);
 
-    sp.getParent().revalidate();
-    panel.revalidate();
     parent.get().revalidate();
   }
 
@@ -107,6 +105,8 @@ public class OntFnParameter implements ItemListener {
         break;
       }
     }
+
+    parent.get().revalidate();
   }
 
   private void updateStyle() {

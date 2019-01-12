@@ -28,6 +28,9 @@ public class OntInvokeDialog extends DialogWrapper {
   private HashMap<String, OntFnParameter> parameters;
   private AbiFunction fn;
 
+  private JCheckBox cbPreExec;
+  private JCheckBox cbWaitResult;
+
   public OntInvokeDialog(@Nullable Project project, String src, String method) throws Exception {
     super(project);
     init();
@@ -47,20 +50,42 @@ public class OntInvokeDialog extends DialogWrapper {
     }
 
     int pLen = fn.parameters.size();
-    if (pLen > 0) {
-      panel.setLayout(new GridLayoutManager(pLen, 1));
+    panel.setLayout(new GridLayoutManager(pLen + 1, 1));
 
+    int rowIdx = 0;
+
+    cbPreExec = new JCheckBox();
+    cbPreExec.setText("Pre Exec");
+    cbPreExec.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    GridConstraints c = new GridConstraints();
+    c.setRow(rowIdx);
+    c.setAnchor(GridConstraints.ANCHOR_WEST);
+    c.setIndent(1);
+    panel.add(cbPreExec, c);
+
+    cbWaitResult = new JCheckBox();
+    cbWaitResult.setText("Wait Result");
+    cbWaitResult.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    c = new GridConstraints();
+    c.setRow(rowIdx);
+    c.setAnchor(GridConstraints.ANCHOR_WEST);
+    c.setIndent(10);
+    panel.add(cbWaitResult, c);
+
+    rowIdx++;
+    if (pLen > 0) {
       parameters = new HashMap<>();
-      AtomicInteger i = new AtomicInteger();
+      AtomicInteger i = new AtomicInteger(rowIdx);
+      int len = pLen + 1;
       fn.parameters.forEach(p -> {
         OntFnParameter param = new OntFnParameter(panel, p.name);
-        GridConstraints c = new GridConstraints();
-        c.setRow(i.get());
-        JComponent field = i.get() == pLen - 1 ? param.asLastField() : param.getComponent();
-        panel.add(field, c);
+        GridConstraints cc = new GridConstraints();
+        cc.setRow(i.get());
+        cc.setAnchor(GridConstraints.ANCHOR_NORTH);
+        JComponent field = i.get() == len - 1 ? param.asLastField() : param.getComponent();
+        panel.add(field, cc);
 
         parameters.put(p.name, param);
-
         i.getAndIncrement();
       });
     }
@@ -89,6 +114,13 @@ public class OntInvokeDialog extends DialogWrapper {
     return filename.substring(0, filename.length() - 3);
   }
 
+  public boolean getPreExec() {
+    return cbPreExec.isSelected();
+  }
+
+  public boolean getWaitResult() {
+    return cbWaitResult.isSelected();
+  }
 
   @Nullable
   @Override

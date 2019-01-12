@@ -60,6 +60,12 @@ public class AbiFile {
     return Paths.get(srcPath).getParent().resolve("./build/" + filename + ".avm").normalize().toString();
   }
 
+  public static String extractSrcFilename(String src) {
+    Path path = Paths.get(src);
+    String filename = path.getFileName().toString();
+    return filename.substring(0, filename.length() - 3);
+  }
+
   @JSONField(serialize = false)
   public String getSelfPath() {
     return selfPath;
@@ -100,7 +106,7 @@ public class AbiFile {
     try {
       byte[] raw = Files.readAllBytes(Paths.get(selfPath));
       abiInfo = JSON.parseObject(raw, AbiInfo.class);
-      return  abiInfo.getFunction(name);
+      return abiInfo.getFunction(name);
     } catch (Exception e) {
       e.printStackTrace();
     }

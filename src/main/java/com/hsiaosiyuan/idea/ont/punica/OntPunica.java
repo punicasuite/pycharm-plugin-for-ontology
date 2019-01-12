@@ -110,6 +110,19 @@ public class OntPunica {
     return commandLine;
   }
 
+  public static ConsoleView makeConsoleView(Project project, String title) {
+    ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+
+    ContentImpl content = new ContentImpl(consoleView.getComponent(), title, true);
+
+    ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(OntConsoleToolWindowFactory.ID);
+    window.getContentManager().addContent(content);
+    window.getContentManager().setSelectedContent(content, true);
+    window.activate(null);
+
+    return consoleView;
+  }
+
   public static void startCmdProcess(GeneralCommandLine cmd, Project project, @Nullable Consumer<ProcessEvent> onTerminated) {
     OntNotifier notifier = OntNotifier.getInstance(project);
     OSProcessHandler osProcessHandler;
@@ -130,14 +143,8 @@ public class OntPunica {
     }
 
     ProcessTerminatedListener.attach(osProcessHandler, project);
-    ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
 
-    ToolWindow window = ToolWindowManager.getInstance(project).getToolWindow(OntConsoleToolWindowFactory.ID);
-    ContentImpl content = new ContentImpl(consoleView.getComponent(), "Punica", true);
-    window.getContentManager().addContent(content);
-    window.getContentManager().setSelectedContent(content, true);
-
-    window.activate(null);
+    ConsoleView consoleView = makeConsoleView(project, "Punica");
     consoleView.attachToProcess(osProcessHandler);
 
     osProcessHandler.startNotify();
