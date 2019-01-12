@@ -56,16 +56,15 @@ public class OntInvokeDialog extends DialogWrapper {
 
     cbPreExec = new JCheckBox();
     cbPreExec.setText("Pre Exec");
-    cbPreExec.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    cbPreExec.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
     GridConstraints c = new GridConstraints();
     c.setRow(rowIdx);
     c.setAnchor(GridConstraints.ANCHOR_WEST);
-    c.setIndent(1);
     panel.add(cbPreExec, c);
 
     cbWaitResult = new JCheckBox();
     cbWaitResult.setText("Wait Result");
-    cbWaitResult.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    cbWaitResult.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
     c = new GridConstraints();
     c.setRow(rowIdx);
     c.setAnchor(GridConstraints.ANCHOR_WEST);
