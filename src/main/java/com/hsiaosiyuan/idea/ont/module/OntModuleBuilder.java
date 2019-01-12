@@ -36,9 +36,14 @@ import java.nio.file.Path;
 import java.util.Objects;
 
 public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderListener {
+  private static boolean isBuilding = false;
 
   public OntModuleBuilder() {
     addListener(this);
+  }
+
+  public static boolean getIsBuilding() {
+    return isBuilding;
   }
 
   @Override
@@ -59,6 +64,8 @@ public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderList
 
   @Override
   public void moduleCreated(@NotNull Module module) {
+    isBuilding = true;
+
     Project project = module.getProject();
     OntNotifier notifier = OntNotifier.getInstance(project);
 
@@ -108,6 +115,7 @@ public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderList
       public void onSuccess() {
         ApplicationManager.getApplication().runWriteAction(() -> {
           try {
+            isBuilding = false;
             setupModule(module);
             VirtualFileManager.getInstance().refreshWithoutFileWatcher(false);
           } catch (ConfigurationException e) {

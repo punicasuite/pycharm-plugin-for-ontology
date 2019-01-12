@@ -1,5 +1,6 @@
 package com.hsiaosiyuan.idea.ont.punica;
 
+import com.hsiaosiyuan.idea.ont.module.OntModuleBuilder;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
@@ -58,6 +59,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
       reloadDeployConfig(evt);
       reloadNetworkConfig(evt);
     } catch (IOException e) {
+      if (OntModuleBuilder.getIsBuilding()) return;
       notifier.notifyError("Ontology", "Unable to reload config: " + e.getMessage());
     }
   }
@@ -66,7 +68,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
 
-    if(project.isDisposed()) return;
+    if (project.isDisposed()) return;
 
     Path path = OntPunicaConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;
@@ -78,7 +80,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
 
-    if(project.isDisposed()) return;
+    if (project.isDisposed()) return;
 
     Path path = OntDeployConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;
@@ -90,7 +92,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     Project project = getProjectByFile(evt.getFile());
     if (project == null) return;
 
-    if(project.isDisposed()) return;
+    if (project.isDisposed()) return;
 
     Path path = OntNetworkConfig.getInstance(project).getFilePath();
     if (!path.toString().equals(evt.getPath())) return;
