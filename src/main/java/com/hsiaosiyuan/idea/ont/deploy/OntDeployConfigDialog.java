@@ -6,6 +6,7 @@ import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -49,7 +50,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
 
     OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
     netCfg.networks.keySet().forEach(k -> cbNetworks.addItem(new Item(k, k)));
-    cbNetworks.setSelectedItem(new Item(netCfg.defaultNetwork, netCfg.defaultNetwork));
+    cbNetworks.setSelectedItem(new Item(netCfg.defaultNet, netCfg.defaultNet));
   }
 
   @Nullable
@@ -73,7 +74,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
       config.save();
 
       OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
-      netCfg.defaultNetwork = ((Item) Objects.requireNonNull(cbNetworks.getSelectedItem())).getId();
+      netCfg.defaultNet = ((Item) Objects.requireNonNull(cbNetworks.getSelectedItem())).getId();
       netCfg.save();
     } catch (IOException e) {
       OntNotifier notifier = OntNotifier.getInstance(project);
@@ -85,7 +86,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
     private String id;
     private String description;
 
-    public Item(String id, String description) {
+    public Item(@NotNull String id, @NotNull String description) {
       this.id = id;
       this.description = description;
     }

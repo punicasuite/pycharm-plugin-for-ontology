@@ -16,7 +16,7 @@ public class OntNetworkConfig {
   public static final String FILENAME = "punica-config.json";
   private static OntNetworkConfig inst = null;
 
-  public String defaultNetwork;
+  public String defaultNet;
   public HashMap<String, Network> networks;
 
   private Project project;
@@ -50,7 +50,7 @@ public class OntNetworkConfig {
 
   public void load() throws IOException {
     OntNetworkConfig obj = JSON.parseObject(new String(getRaw()), OntNetworkConfig.class);
-    defaultNetwork = obj.defaultNetwork;
+    defaultNet = obj.defaultNet;
     networks = obj.networks;
   }
 
@@ -62,7 +62,7 @@ public class OntNetworkConfig {
   @Nullable
   @JSONField(serialize = false)
   public String getRpcAddr() {
-    Network network = networks.get(defaultNetwork);
+    Network network = networks.get(defaultNet);
     if (network == null) return null;
 
     return network.host + ":" + network.port;
