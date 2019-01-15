@@ -1,0 +1,31 @@
+{
+  "name": "ontdev",
+  "version": "1.0.0",
+  "description": "Local service for ontology development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "prettier": "^1.15.3"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "get-port": "^4.1.0",
+    "glob": "^7.1.3",
+    "ontology-ts-crypto": "^0.1.24",
+    "ontology-ts-test": "^0.2.37",
+    "ontology-ts-vm": "^0.3.17",
+    "punica-ts": "^0.2.37",
+    "rimraf": "^2.6.3",
+    "rsync": "^0.6.1",
+    "socket.io": "^2.2.0",
+    "temp-dir": "^1.0.0",
+    "tmp": "0.0.33",
+    "yargs": "^12.0.5"
+  }
+}

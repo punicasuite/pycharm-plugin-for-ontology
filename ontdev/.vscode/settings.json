@@ -1,0 +1,12 @@
+{
+  "javascript.suggestionActions.enabled": false,
+  "cSpell.words": [
+    "Rsync",
+    "Struct",
+    "ontdev",
+    "polyfill",
+    "promisify",
+    "punica",
+    "uuidv"
+  ]
+}
