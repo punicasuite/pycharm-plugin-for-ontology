@@ -10,6 +10,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -105,6 +106,23 @@ public class OntInvokeDialog extends DialogWrapper {
       fun.parameters.add(tp);
     }
     return fun;
+  }
+
+  // encapsulates params into JSONObject to be used in debug mode
+  public JSONObject getDebugParams() {
+    JSONObject ret = new JSONObject();
+    for (Parameter param : fn.parameters) {
+      try {
+        String pn = param.name;
+        OntFnParameter pp = parameters.get(param.name);
+        String pt = pp.getType().abiType();
+        ret.put(pn, pp.getValue());
+        ret.put(pn + "-type", pt);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return ret;
   }
 
   private String getFilename() {

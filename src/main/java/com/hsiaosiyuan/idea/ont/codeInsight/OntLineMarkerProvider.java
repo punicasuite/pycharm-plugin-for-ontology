@@ -1,6 +1,7 @@
 package com.hsiaosiyuan.idea.ont.codeInsight;
 
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
+import com.hsiaosiyuan.idea.ont.debug.OntDebugAction;
 import com.hsiaosiyuan.idea.ont.run.OntRunAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -12,8 +13,6 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.jetbrains.python.psi.PyElementType;
 import com.jetbrains.python.psi.PyFunction;
@@ -61,13 +60,13 @@ public class OntLineMarkerProvider implements LineMarkerProvider {
 
     }).forEach((element) -> {
 
-      final AnAction runAction = new OntRunAction(element.getContainingFile().getVirtualFile().getPath(), element.getText());
-
-      SmartPsiElementPointer<PsiElement> smp = SmartPointerManager.getInstance(element.getProject()).createSmartPsiElementPointer(element);
-//      final RunContextAction debugAction = new OdRunContextAction(OdDebugExecutor.getInstance(smp));
+      String src = element.getContainingFile().getVirtualFile().getPath();
+      String method = element.getText();
+      final AnAction runAction = new OntRunAction(src, method);
+      final AnAction debugAction = new OntDebugAction(src, method);
 
       final DefaultActionGroup group = new DefaultActionGroup();
-//      group.add(debugAction);
+      group.add(debugAction);
 
       LineMarkerInfo<PsiElement> info = new LineMarkerInfo<PsiElement>(
           element,

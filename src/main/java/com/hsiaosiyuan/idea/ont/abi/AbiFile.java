@@ -54,10 +54,23 @@ public class AbiFile {
   }
 
   public static String srcPath2AvmPath(String srcPath) {
-    Path path = Paths.get(srcPath);
-    String filename = path.getFileName().toString();
-    filename = filename.substring(0, filename.length() - 3);
+    String filename = extractSrcFilename(srcPath);
     return Paths.get(srcPath).getParent().resolve("./build/" + filename + ".avm").normalize().toString();
+  }
+
+  public static String srcPath2AbiPath(String srcPath) {
+    String filename = extractSrcFilename(srcPath);
+    return Paths.get(srcPath).getParent().resolve("./build/" + filename + "_abi.json").normalize().toString();
+  }
+
+  public static String srcPath2DebugInfoPath(String srcPath) {
+    String filename = extractSrcFilename(srcPath);
+    return Paths.get(srcPath).getParent().resolve("./build/" + filename + "_debug.json").normalize().toString();
+  }
+
+  public static String srcPath2FuncMapPath(String srcPath) {
+    String filename = extractSrcFilename(srcPath);
+    return Paths.get(srcPath).getParent().resolve("./build/" + filename + "_funcMap.json").normalize().toString();
   }
 
   public static String extractSrcFilename(String src) {
