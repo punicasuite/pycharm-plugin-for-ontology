@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
 import com.hsiaosiyuan.idea.ont.invoke.OntInvokeDialog;
+import com.hsiaosiyuan.idea.ont.punica.OntCommandLine;
+import com.hsiaosiyuan.idea.ont.punica.OntPunica;
+import com.hsiaosiyuan.idea.ont.punica.OntPunicaFactory;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
 import com.intellij.execution.configurations.GeneralCommandLine;
@@ -120,12 +123,7 @@ public class OntDebugAgent {
 
     this.listener = listener;
 
-    GeneralCommandLine cmd = new GeneralCommandLine();
-    cmd.setExePath("/Users/hsy/ws/ont/ontdev/bin/ontdev.js");
-    cmd.addParameters("debug");
-    cmd.addParameter("--ticket");
-    cmd.addParameter(ticket);
-
+    GeneralCommandLine cmd = OntPunicaFactory.create().makeDebugCmd(ticket);
     processHandler = new OntRunCmdHandler(cmd.createProcess(), cmd.getCommandLineString());
     consoleView.attachToProcess(processHandler);
 
@@ -370,7 +368,7 @@ public class OntDebugAgent {
     SwingUtilities.invokeLater(() -> {
       OntInvokeDialog invokeDialog;
       try {
-        invokeDialog = new OntInvokeDialog(project, src, method);
+        invokeDialog = new OntInvokeDialog(project, src, method, true);
       } catch (Exception e) {
         getNotifier().notifyError("Ontology", e);
         future.complete("Unable to make invoke dialog");

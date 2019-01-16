@@ -33,6 +33,10 @@ public class OntInvokeDialog extends DialogWrapper {
   private JCheckBox cbWaitResult;
 
   public OntInvokeDialog(@Nullable Project project, String src, String method) throws Exception {
+    this(project, src, method, false);
+  }
+
+  public OntInvokeDialog(@Nullable Project project, String src, String method, boolean debugMode) throws Exception {
     super(project);
     init();
 
@@ -55,24 +59,27 @@ public class OntInvokeDialog extends DialogWrapper {
 
     int rowIdx = 0;
 
-    cbPreExec = new JCheckBox();
-    cbPreExec.setText("Pre Exec");
-    cbPreExec.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
-    GridConstraints c = new GridConstraints();
-    c.setRow(rowIdx);
-    c.setAnchor(GridConstraints.ANCHOR_WEST);
-    panel.add(cbPreExec, c);
+    if (!debugMode) {
+      cbPreExec = new JCheckBox();
+      cbPreExec.setText("Pre Exec");
+      cbPreExec.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
+      GridConstraints c = new GridConstraints();
+      c.setRow(rowIdx);
+      c.setAnchor(GridConstraints.ANCHOR_WEST);
+      panel.add(cbPreExec, c);
 
-    cbWaitResult = new JCheckBox();
-    cbWaitResult.setText("Wait Result");
-    cbWaitResult.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
-    c = new GridConstraints();
-    c.setRow(rowIdx);
-    c.setAnchor(GridConstraints.ANCHOR_WEST);
-    c.setIndent(10);
-    panel.add(cbWaitResult, c);
+      cbWaitResult = new JCheckBox();
+      cbWaitResult.setText("Wait Result");
+      cbWaitResult.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 10));
+      c = new GridConstraints();
+      c.setRow(rowIdx);
+      c.setAnchor(GridConstraints.ANCHOR_WEST);
+      c.setIndent(10);
+      panel.add(cbWaitResult, c);
 
-    rowIdx++;
+      rowIdx++;
+    }
+
     if (pLen > 0) {
       parameters = new HashMap<>();
       AtomicInteger i = new AtomicInteger(rowIdx);

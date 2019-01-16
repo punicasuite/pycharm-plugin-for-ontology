@@ -29,7 +29,7 @@ public class OntCompileAction extends AnAction {
     Project project = e.getProject();
     if (project == null) return;
 
-    GeneralCommandLine cmd = OntPunicaFactory.create().makeCompileCmd(project.getBasePath(), file.getPath());
+    GeneralCommandLine cmd = OntPunicaFactory.create().makeCompileCmd(file.getPath());
 
     OntPunica.startCmdProcess(cmd, project, evt -> {
       ApplicationManager.getApplication().invokeLater(() -> {

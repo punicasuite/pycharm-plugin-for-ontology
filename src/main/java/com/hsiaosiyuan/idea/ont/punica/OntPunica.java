@@ -37,10 +37,10 @@ public class OntPunica {
   public boolean exist() {
     if (!bin.isFile() || !bin.canExecute()) return false;
 
-    ProcessOutput out = exec();
+    ProcessOutput out = exec("-h");
     if (out == null) return false;
 
-    return out.getStdout().contains("Punica CLI");
+    return out.getStdout().contains("ontdev");
   }
 
   @Nullable
@@ -73,41 +73,31 @@ public class OntPunica {
   }
 
   public GeneralCommandLine makeInitCmd(String wd) {
-    GeneralCommandLine commandLine = new GeneralCommandLine();
+    GeneralCommandLine commandLine = new OntCommandLine();
     commandLine.setExePath(bin.getAbsolutePath());
-    commandLine.addParameter("init");
-    commandLine.addParameter("-p");
+    commandLine.addParameter("project");
+    commandLine.addParameter("-i");
     commandLine.addParameters(wd);
     return commandLine;
   }
 
-  public GeneralCommandLine makeCompileCmd(String wd, String contractsDir) {
-
-    if (contractsDir.startsWith("/")) {
-      contractsDir = new File(wd).toURI().relativize(new File(contractsDir).toURI()).getPath();
-    }
-
-    GeneralCommandLine commandLine = new GeneralCommandLine() {
-      @NotNull
-      @Override
-      protected Process startProcess(@NotNull List<String> escapedCommands) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder(escapedCommands);
-        Map<String, String> env = builder.environment();
-        setupEnvironment(env);
-        env.put("NODE_NO_WARNINGS", "1");
-        builder.directory(getWorkDirectory());
-        builder.redirectErrorStream(isRedirectErrorStream());
-        return builder.start();
-      }
-    };
+  public GeneralCommandLine makeCompileCmd(String fileOrDir) {
+    GeneralCommandLine commandLine = new OntCommandLine();
 
     commandLine.setExePath(bin.getAbsolutePath());
-    commandLine.addParameter("compile");
-    commandLine.addParameter("-p");
-    commandLine.addParameters(wd);
-    commandLine.addParameters("--contracts");
-    commandLine.addParameters(contractsDir);
+    commandLine.addParameter("project");
+    commandLine.addParameter("-c");
+    commandLine.addParameters(fileOrDir);
     return commandLine;
+  }
+
+  public GeneralCommandLine makeDebugCmd(String ticket) {
+    GeneralCommandLine cmd = new OntCommandLine();
+    cmd.setExePath("/Users/hsy/ws/ont/ontdev/bin/ontdev.js");
+    cmd.addParameters("debug");
+    cmd.addParameter("--ticket");
+    cmd.addParameter(ticket);
+    return cmd;
   }
 
   public static ConsoleView makeConsoleView(Project project, String title) {
