@@ -4,6 +4,8 @@ import com.intellij.xdebugger.frame.XExecutionStack;
 import com.intellij.xdebugger.frame.XStackFrame;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+
 public class OntExecutionStack extends XExecutionStack {
   private OntStackFrame myTopFrame;
 
@@ -20,6 +22,8 @@ public class OntExecutionStack extends XExecutionStack {
 
   @Override
   public void computeStackFrames(int firstFrameIndex, XStackFrameContainer container) {
-
+    container.addStackFrames(new ArrayList<XStackFrame>() {{
+      add(myTopFrame);
+    }}, true);
   }
 }

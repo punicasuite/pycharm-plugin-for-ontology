@@ -10,15 +10,16 @@ import org.jetbrains.annotations.Nullable;
 public class OntSuspendContext extends XSuspendContext {
   private XSourcePosition mySourcePosition;
   private XExecutionStack myExecutionStack;
+  private OntDebugAgent myAgent;
 
-  public OntSuspendContext(XSourcePosition sourcePosition) {
+  public OntSuspendContext(XSourcePosition sourcePosition, OntDebugAgent agent) {
     mySourcePosition = sourcePosition;
-
+    myAgent = agent;
     myExecutionStack = initExecutionStack();
   }
 
   private OntExecutionStack initExecutionStack() {
-    OntStackFrame frame = new OntStackFrame(mySourcePosition);
+    OntStackFrame frame = new OntStackFrame(mySourcePosition, myAgent);
 
     return new OntExecutionStack("Main Routine", frame);
   }

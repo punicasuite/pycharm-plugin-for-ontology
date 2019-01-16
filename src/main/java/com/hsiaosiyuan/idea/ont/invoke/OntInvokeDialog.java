@@ -113,11 +113,8 @@ public class OntInvokeDialog extends DialogWrapper {
     JSONObject ret = new JSONObject();
     for (Parameter param : fn.parameters) {
       try {
-        String pn = param.name;
         OntFnParameter pp = parameters.get(param.name);
-        String pt = pp.getType().abiType();
-        ret.put(pn, pp.getValue());
-        ret.put(pn + "-type", pt);
+        pp.convertToDebug(ret);
       } catch (Exception e) {
         e.printStackTrace();
       }

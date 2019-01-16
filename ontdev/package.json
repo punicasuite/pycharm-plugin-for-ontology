@@ -1,8 +1,11 @@
 {
   "name": "ontdev",
-  "version": "1.0.0",
-  "description": "Local service for ontology development",
+  "version": "0.0.1",
+  "description": "Development kit for ontology, use it with the plugin of IntelliJ IDEA",
   "main": "index.js",
+  "bin": {
+    "ontdev": "./bin/ontdev.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +18,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "commander": "^2.19.0",
     "get-port": "^4.1.0",
     "glob": "^7.1.3",
     "ontology-ts-crypto": "^0.1.24",
@@ -25,7 +29,6 @@
     "rsync": "^0.6.1",
     "socket.io": "^2.2.0",
     "temp-dir": "^1.0.0",
-    "tmp": "0.0.33",
-    "yargs": "^12.0.5"
+    "tmp": "0.0.33"
   }
 }

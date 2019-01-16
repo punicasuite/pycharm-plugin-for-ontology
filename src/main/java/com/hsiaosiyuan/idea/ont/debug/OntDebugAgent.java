@@ -36,9 +36,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class OntDebugAgent {
   private XDebugSession session;
@@ -120,7 +121,7 @@ public class OntDebugAgent {
     this.listener = listener;
 
     GeneralCommandLine cmd = new GeneralCommandLine();
-    cmd.setExePath("/Users/hsy/ws/ontdev/bin/ontdev.js");
+    cmd.setExePath("/Users/hsy/ws/ont/ontdev/bin/ontdev.js");
     cmd.addParameters("debug");
     cmd.addParameter("--ticket");
     cmd.addParameter(ticket);
@@ -166,8 +167,11 @@ public class OntDebugAgent {
     if (socket != null) {
       socket.disconnect();
     }
-    for (Map.Entry<String, Pending> entry : pendings.entrySet()) {
-      entry.getValue().future.complete(new JSONObject());
+    for (String key : pendings.keySet()) {
+      Pending item = pendings.get(key);
+      if (item != null) {
+        item.future.complete(new JSONObject());
+      }
     }
   }
 
@@ -189,9 +193,9 @@ public class OntDebugAgent {
     }
 
     socket = IO.socket("http://localhost:" + port);
+    final OntDebugAgent agent = this;
 
     socket.on(Socket.EVENT_CONNECT, args -> {
-      processHandler.notifyTextAvailable("Connected\n", ProcessOutputTypes.SYSTEM);
       if (listener != null) {
         listener.onReady(this);
       }
@@ -230,7 +234,7 @@ public class OntDebugAgent {
       SwingUtilities.invokeLater(() -> {
         XBreakpoint bp = findBreakpoint(obj);
         if (bp != null) {
-          session.breakpointReached(bp, null, new OntSuspendContext(bp.getSourcePosition()));
+          session.breakpointReached(bp, null, new OntSuspendContext(bp.getSourcePosition(), agent));
         }
       });
     });
@@ -242,7 +246,7 @@ public class OntDebugAgent {
         VirtualFile vf = LocalFileSystem.getInstance().findFileByIoFile(Paths.get(src).toFile());
         XSourcePosition position = XDebuggerUtil.getInstance().createPosition(vf, line - 1);
         SwingUtilities.invokeLater(() -> {
-          session.positionReached(new OntSuspendContext(position));
+          session.positionReached(new OntSuspendContext(position, agent));
         });
       } catch (JSONException e) {
         e.printStackTrace();
@@ -389,7 +393,7 @@ public class OntDebugAgent {
 
     if (errMsg != null) {
       if (errMsg.equals("User canceled")) {
-        processHandler.notifyTextAvailable("User canceled", ProcessOutputTypes.SYSTEM);
+        processHandler.notifyTextAvailable("User canceled\n", ProcessOutputTypes.SYSTEM);
         session.stop();
       } else {
         getNotifier().notifyError("Ontology", errMsg);
@@ -432,6 +436,17 @@ public class OntDebugAgent {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public CompletableFuture<JSONObject> queryVariables(@Nullable String rf) {
+    JSONObject data = new JSONObject();
+    if (rf == null) rf = "0";
+    try {
+      data.put("rf", rf);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    return send("variables", data, true);
   }
 
   public static class LockContent {

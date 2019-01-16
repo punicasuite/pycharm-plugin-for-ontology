@@ -11,3 +11,5 @@ It takes benefit from:
 * [punica-ts](https://github.com/punicasuite/punica-ts)
 
 * [vscode-ext-ontology](https://github.com/punicasuite/vscode-ext-ontology)
+
+It's not recommend to use this package alone, see more about [Plugin of IntelliJ IDEA](https://github.com/punicasuite/pycharm-plugin-for-ontology)

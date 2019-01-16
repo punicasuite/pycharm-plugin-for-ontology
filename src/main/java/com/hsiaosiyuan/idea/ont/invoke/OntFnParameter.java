@@ -6,15 +6,13 @@ import com.github.ontio.common.Address;
 import com.github.ontio.common.Helper;
 import com.github.ontio.sdk.exception.SDKException;
 import com.hsiaosiyuan.idea.ont.deploy.OntDeployConfigDialog;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OntFnParameter implements ItemListener {
   private JPanel panel;
@@ -187,7 +185,102 @@ public class OntFnParameter implements ItemListener {
         return parseMap(taVal.getText().trim());
       }
       default:
-        throw new InvalidTypeException("Unsupported label");
+        throw new InvalidTypeException("Unsupported type");
+    }
+  }
+
+  public String getValueAsString() throws InvalidTypeException {
+    switch (vType) {
+      case STRING:
+      case INTEGER:
+      case ADDRESS:
+      case LONG:
+      case BYTE_ARRAY:
+        return txVal.getText().trim();
+      case BOOLEAN:
+        return rbTrue.isSelected() ? "true" : "false";
+      case ARRAY:
+      case MAP: {
+        return taVal.getText().trim();
+      }
+      default:
+        throw new InvalidTypeException("Unsupported type");
+    }
+  }
+
+  @SuppressWarnings("Duplicates")
+  private static void convertDebugValue(JSONObject container, String name, String value, Type type) {
+    String kType = name + "-type";
+    try {
+      switch (type) {
+        case STRING: {
+          container.put(name, parseValue(value.trim(), Type.STRING));
+          container.put(kType, type.abiType());
+          break;
+        }
+        case INTEGER: {
+          container.put(name, parseValue(value.trim(), Type.INTEGER));
+          container.put(kType, type.abiType());
+          break;
+        }
+        case ADDRESS: {
+          container.put(name, parseValue(value.trim(), Type.ADDRESS));
+          container.put(kType, type.abiType());
+          break;
+        }
+        case LONG: {
+          container.put(name, parseValue(value.trim(), Type.LONG));
+          container.put(kType, type.abiType());
+          break;
+        }
+        case BYTE_ARRAY: {
+          container.put(name, parseValue(value.trim(), Type.BYTE_ARRAY));
+          container.put(kType, type.abiType());
+          break;
+        }
+        case BOOLEAN: {
+          container.put(name, value.trim());
+          container.put(kType, type.abiType());
+          break;
+        }
+        case ARRAY: {
+          List<TypedItem> in = JSON.parseArray(value.trim(), TypedItem.class);
+          container.put(kType, type.abiType());
+          for (int i = 0; i < in.size(); i++) {
+            TypedItem item = in.get(i);
+            convertDebugValue(container, name + "[" + i + "]", item.value.toString(), item.typ());
+          }
+          break;
+        }
+        case MAP: {
+          Map<String, TypedItem> in = JSON.parseObject(value, new TypeReference<Map<String, TypedItem>>() {
+          }.getType());
+          container.put(kType, type.abiType());
+
+          List<Map.Entry<String, TypedItem>> items = new ArrayList<>(in.entrySet());
+          for (int i = 0; i < items.size(); i++) {
+            Map.Entry<String, TypedItem> item = items.get(i);
+            String key = item.getKey();
+            TypedItem val = item.getValue();
+
+            convertDebugValue(container, name + "[" + i + "]-name", key, Type.STRING);
+            convertDebugValue(container, name + "[" + i + "]", val.value.toString(), val.typ());
+          }
+          break;
+        }
+        default:
+          throw new InvalidTypeException("Unsupported type");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void convertToDebug(JSONObject container) {
+    try {
+      convertDebugValue(container, vName, getValueAsString(), vType);
+    } catch (InvalidTypeException e) {
+      e.printStackTrace();
     }
   }
 

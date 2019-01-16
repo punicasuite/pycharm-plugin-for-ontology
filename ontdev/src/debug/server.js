@@ -26,6 +26,7 @@ module.exports.DebugServer = class DebugServer {
 
     this.io = IO();
     this.io.on("connect", conn => {
+      console.log("New Client: " + conn.id);
       const sess = new DebugSession(conn);
       this.sessColl.set(conn.id, sess);
       conn.on("disconnect", () => {

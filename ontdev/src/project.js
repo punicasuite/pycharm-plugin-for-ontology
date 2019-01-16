@@ -15,6 +15,7 @@ git.plugins.set("fs", fs);
 module.exports.Project = class {
   static async init(dir) {
     try {
+      await fs.promises.access(dir, fs.constants.R_OK | fs.constants.W_OK);
       const td = await tmpDir();
       console.log("Downloading into temporary directory: " + td);
       await new Box().init(td);
@@ -24,7 +25,6 @@ module.exports.Project = class {
         .exclude([".git"])
         .recursive()
         .destination(dir);
-
       rsync = util.promisify(rsync.execute.bind(rsync));
 
       console.log("Copying into project directory...");
