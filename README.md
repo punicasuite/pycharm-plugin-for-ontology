@@ -1,4 +1,4 @@
-# Pycharm Plugin for Ontology
+# PyCharm Plugin for Ontology
 
 Adds support for Ontology Smart Contract Development:
 
