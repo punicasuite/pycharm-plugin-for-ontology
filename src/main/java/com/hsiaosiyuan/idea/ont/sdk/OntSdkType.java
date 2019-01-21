@@ -18,7 +18,7 @@ import java.awt.*;
 public class OntSdkType extends SdkType {
 
   public OntSdkType() {
-    super("Punica CLI");
+    super("Ontdev CLI");
   }
 
   public static OntSdkType getInstance() {
@@ -56,7 +56,7 @@ public class OntSdkType extends SdkType {
   @NotNull
   @Override
   public String getPresentableName() {
-    return "Punica CLI";
+    return "Ontdev CLI";
   }
 
   @Override
@@ -84,7 +84,6 @@ public class OntSdkType extends SdkType {
     PythonSdkDetailsStep
         .show(project, null, sdkModel.getSdks(), null, parentComponent, point, null, sdk -> {
           if (sdk != null) {
-//            sdk.putUserData(SDK_CREATOR_COMPONENT_KEY, new WeakReference<>(parentComponent));
             sdkCreatedCallback.consume(sdk);
           }
         });

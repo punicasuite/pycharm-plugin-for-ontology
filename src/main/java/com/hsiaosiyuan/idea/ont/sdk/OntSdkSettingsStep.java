@@ -42,7 +42,7 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
                             @NotNull Condition<? super SdkTypeId> sdkTypeIdFilter,
                             @Nullable Condition<? super Sdk> sdkFilter) {
     this(settingsStep.getContext(), moduleBuilder, sdkTypeIdFilter, sdkFilter);
-    settingsStep.addSettingsField("Punica CLI:", panel);
+    settingsStep.addSettingsField("Ontdev:", panel);
   }
 
   public OntSdkSettingsStep(WizardContext context, @NotNull ModuleBuilder moduleBuilder, @NotNull Condition<? super SdkTypeId> sdkTypeIdFilter, @Nullable Condition<? super Sdk> sdkFilter) {
@@ -72,7 +72,7 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
   public void actionPerformed(ActionEvent e) {
     FileChooserDescriptor descriptor = FileChooserDescriptorFactory
         .createSingleFileNoJarsDescriptor()
-        .withTitle("Choose Punica CLI");
+        .withTitle("Choose Ontdev CLI");
 
     FileChooser.chooseFile(descriptor, myWizardContext.getProject(), null, file -> {
       txPath.setText(file.getPath());
@@ -83,7 +83,7 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
   public boolean validate() throws ConfigurationException {
     String path = txPath.getText();
     if (path == null || path.isEmpty()) {
-      throw new ConfigurationException("Please specify the path of Punica CLI :(");
+      throw new ConfigurationException("Please specify the path of Ontdev CLI :(");
     }
 
     AtomicBoolean ok = new AtomicBoolean(false);
@@ -92,7 +92,7 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
       ok.set(new OntPunica(path).exist());
     }, "Checking...", false, myWizardContext.getProject());
 
-    if (!ok.get()) throw new ConfigurationException("Unable to detect Punica CLI via the given path :(");
+    if (!ok.get()) throw new ConfigurationException("Unable to detect Ontdev CLI via the given path :(");
     OntSdkSettings.getInstance().PUNICA_BIN = path;
     return true;
   }
