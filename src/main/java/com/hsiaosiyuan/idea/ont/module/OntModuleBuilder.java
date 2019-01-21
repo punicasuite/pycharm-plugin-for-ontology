@@ -73,7 +73,7 @@ public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderList
     try {
       tmpWorkDir = Files.createTempDirectory("ont");
     } catch (IOException e) {
-      notifier.notifyError("Punica Error", e);
+      notifier.notifyError("Ontdev Error", e);
       return;
     }
 
@@ -105,7 +105,7 @@ public class OntModuleBuilder extends ModuleBuilder implements ModuleBuilderList
         try {
           FileUtils.copyDirectory(src, dest, filter);
         } catch (IOException e) {
-          notifier.notifyError("Punica Error", e);
+          notifier.notifyError("Ontdev Error", e);
         }
 
         notifyFinished();

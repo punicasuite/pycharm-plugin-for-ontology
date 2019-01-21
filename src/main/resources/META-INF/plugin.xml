@@ -40,6 +40,7 @@
         <projectService serviceInterface="com.hsiaosiyuan.idea.ont.run.OntNotifier"
                         serviceImplementation="com.hsiaosiyuan.idea.ont.run.OntNotifier"/>
 
+        <directoryProjectGenerator implementation="com.hsiaosiyuan.idea.ont.module.OntProjectGenerator"/>
     </extensions>
 
     <actions>

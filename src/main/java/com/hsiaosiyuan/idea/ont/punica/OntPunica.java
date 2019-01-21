@@ -119,7 +119,7 @@ public class OntPunica {
     try {
       osProcessHandler = new OntRunCmdHandler(cmd.createProcess(), cmd.getCommandLineString());
     } catch (ExecutionException err) {
-      notifier.notifyError("Punica Error", err);
+      notifier.notifyError("Ontdev Error", err);
       return;
     }
 
@@ -134,7 +134,7 @@ public class OntPunica {
 
     ProcessTerminatedListener.attach(osProcessHandler, project);
 
-    ConsoleView consoleView = makeConsoleView(project, "Punica");
+    ConsoleView consoleView = makeConsoleView(project, "Ontdev");
     consoleView.attachToProcess(osProcessHandler);
 
     osProcessHandler.startNotify();
