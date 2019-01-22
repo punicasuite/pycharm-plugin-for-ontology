@@ -4,8 +4,8 @@ const fs = require("fs");
 const util = require("util");
 const tmp = require("tmp");
 const rimraf = require("rimraf");
-const Rsync = require("rsync");
 const { Compiler } = require("./compiler");
+const copy = require("recursive-copy");
 
 const tmpDir = util.promisify(tmp.dir);
 const rma = util.promisify(rimraf);
@@ -20,15 +20,8 @@ module.exports.Project = class {
       console.log("Downloading into temporary directory: " + td);
       await new Box().init(td);
 
-      let rsync = new Rsync()
-        .source(td + "/")
-        .exclude([".git"])
-        .recursive()
-        .destination(dir);
-      rsync = util.promisify(rsync.execute.bind(rsync));
-
       console.log("Copying into project directory...");
-      await rsync();
+      await copy(td, dir, { filter: ["**/*", "!.git"] });
 
       console.log("Removing temporary directory...");
       await rma(td);

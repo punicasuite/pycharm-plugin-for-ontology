@@ -1,6 +1,6 @@
 {
   "name": "ontdev",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Development kit for ontology, use it with the plugin of IntelliJ IDEA",
   "main": "index.js",
   "bin": {
@@ -30,8 +30,8 @@
     "ontology-ts-test": "^0.2.37",
     "ontology-ts-vm": "^0.3.17",
     "punica-ts": "^0.2.37",
+    "recursive-copy": "^2.0.9",
     "rimraf": "^2.6.3",
-    "rsync": "^0.6.1",
     "socket.io": "^2.2.0",
     "temp-dir": "^1.0.0",
     "tmp": "0.0.33"

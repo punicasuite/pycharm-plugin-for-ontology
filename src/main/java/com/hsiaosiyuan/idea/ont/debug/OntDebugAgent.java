@@ -43,6 +43,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OntDebugAgent {
   private XDebugSession session;
@@ -132,15 +133,23 @@ public class OntDebugAgent {
     OntNotifier notifier = OntNotifier.getInstance(project);
 
     final OntDebugAgent agent = this;
+    final AtomicInteger time = new AtomicInteger(3);
     ProgressManager.getInstance().run(new Task.Backgroundable(project, "Starting Debug Server") {
       @Override
       public void run(@NotNull ProgressIndicator indicator) {
         try {
           indicator.setIndeterminate(true);
 
-          Thread.sleep(2000);
-
           File lockFile = getLockFile();
+
+          while (true) {
+            Thread.sleep(2000);
+            if (lockFile.exists() || time.get() == 0) {
+              break;
+            }
+            time.set(time.get() - 1);
+          }
+
           if (lockFile.exists()) {
             if (agent.listener != null) {
               LockContent lockContent = getLockContent();
@@ -278,7 +287,7 @@ public class OntDebugAgent {
 
   private CompletableFuture<JSONObject> init() throws Exception {
     JSONObject obj = new JSONObject();
-    AbiFile abiFile = AbiIndexManager.getInstance().src2abi.get(src);
+    AbiFile abiFile = AbiIndexManager.getInstance().getAbi(src);
     if (abiFile == null) {
       throw new Exception("Unable to find ABI file");
     }

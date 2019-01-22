@@ -53,7 +53,7 @@ public class OntRunAction extends AnAction {
 
   private boolean isDeployed(Project project) {
     OntNotifier notifier = OntNotifier.getInstance(project);
-    AbiFile abiFile = AbiIndexManager.getInstance().src2abi.get(src);
+    AbiFile abiFile = AbiIndexManager.getInstance().getAbi(src);
     OntNetworkConfig networkConfig;
     try {
       networkConfig = OntNetworkConfig.getInstance(project);
