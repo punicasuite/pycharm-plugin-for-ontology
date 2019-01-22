@@ -7,15 +7,19 @@ Adds support for Ontology Smart Contract Development:
 3. Contract Invocation (Payed / PreExec)
 4. Contract Debugging (Step through / Breakpoints / Variables Preview)
 
-## Requirements
+## Installation
 
-1. Node runtime environment
-2. `npm install -g ontdev`
+1. Install Node.js, by using your favorite way such as [Official Installation Package](https://nodejs.org/en/) or [Node Version Manager](https://github.com/creationix/nvm) etc.
 
-## Usage
+2. Install `Ontdev` via Command Line `npm install -g ontdev`
 
-Please make sure the requirements above have been resolved.
+3. [Download]() and install the plugin's jar file from disk.
 
-When the project creating wizard appears, it will ask you where does the Ontdev locate at.
-You could use `which ontdev` command to find and copy-paste the path, or click the `Choose` button to use `CMD+SHIFT+P` to
-locate to the parent path of `ontdev` then click the file to choose it.
+   1. In the **Settings/Preferences** dialog OSX shortcut `⌘,` Windows shortcut `Ctrl+Alt+S`, select Plugins
+  
+   2. In the **Plugins** dialog, click <img width="16" src="https://www.jetbrains.com/help/img/idea/2018.3/icons.general.gearPlain.svg@2x.png" /> and then click **Install Plugin from Disk..**
+   
+     <img width="450" src="./doc/imgs/install-1.png" />
+
+
+4. when the project creating wizard appears, it will ask you where does the `ontdev` locate at. By default if ontdev is installed correctly, the path will be detected automatically otherwise you could find it out manually via `which ontdev` on *nix or `where.exe` on windows.
