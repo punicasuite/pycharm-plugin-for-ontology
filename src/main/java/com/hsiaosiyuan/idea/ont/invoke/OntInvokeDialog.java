@@ -44,7 +44,7 @@ public class OntInvokeDialog extends DialogWrapper {
     this.method = method;
     ((TitledBorder) panel.getBorder()).setTitle("Invoke: " + getFilename() + "::" + method);
 
-    AbiFile abiFile = AbiIndexManager.getInstance().src2abi.get(src);
+    AbiFile abiFile = AbiIndexManager.getInstance().getAbi(src);
     if (abiFile == null) {
       throw new Exception("Missing ABI file: " + src);
     }

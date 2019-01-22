@@ -19,12 +19,6 @@ public class OntSystemUtil {
   }
 
   @NotNull
-  public static ProcessOutput getProcessOutput(@NotNull final String workDir, @NotNull final String exePath,
-                                               @NotNull final String... arguments) throws ExecutionException {
-    return getProcessOutput(STANDARD_TIMEOUT, workDir, exePath, arguments);
-  }
-
-  @NotNull
   public static ProcessOutput getProcessOutput(final int timeout, @NotNull final String workDir,
                                                @NotNull final String exePath,
                                                @NotNull final String... arguments) throws ExecutionException {

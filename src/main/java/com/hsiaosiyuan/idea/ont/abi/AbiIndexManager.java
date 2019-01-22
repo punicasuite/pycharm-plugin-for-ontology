@@ -26,7 +26,7 @@ public class AbiIndexManager {
   public final HashSet<String> indexFileOrDirCache = new HashSet<>();
 
   public boolean hasFn(String srcAbs, String fn) {
-    AbiFile abiFile = src2abi.get(srcAbs);
+    AbiFile abiFile = src2abi.get(normalizePath(srcAbs));
     if (abiFile == null) return false;
 
     return abiFile.hasFn(fn);
@@ -62,17 +62,25 @@ public class AbiIndexManager {
     indexFile(abiFile.normalize().toString());
   }
 
+  public static String normalizePath(String path) {
+    return Paths.get(path).normalize().toAbsolutePath().toString();
+  }
+
   public boolean hasSrcIndex(String src) {
-    return src2abi.containsKey(src);
+    return src2abi.containsKey(normalizePath(src));
   }
 
   public void removeIndexBySrcFile(String file) {
-    src2abi.remove(file);
+    src2abi.remove(normalizePath(file));
   }
 
   public void removeIndexByAbiFile(String file) {
     String src = AbiFile.abiPath2SrcPath(file);
     src2abi.remove(src);
+  }
+
+  public AbiFile getAbi(String srcPath) {
+    return src2abi.get(normalizePath(srcPath));
   }
 
   private void indexFile(String file) {

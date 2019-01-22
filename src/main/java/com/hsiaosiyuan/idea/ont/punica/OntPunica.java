@@ -4,16 +4,18 @@ import com.github.ontio.OntSdk;
 import com.github.ontio.network.exception.ConnectorException;
 import com.github.ontio.network.exception.RpcException;
 import com.github.ontio.sdk.exception.SDKException;
-import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
 import com.hsiaosiyuan.idea.ont.run.OntConsoleToolWindowFactory;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
+import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
 import com.hsiaosiyuan.idea.ont.util.OntSystemUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.*;
 import com.intellij.execution.ui.ConsoleView;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.impl.ContentImpl;
@@ -24,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class OntPunica {
   private File bin;
@@ -72,6 +73,23 @@ public class OntPunica {
     return version;
   }
 
+  public static String getSuggestPath() {
+    String cmd = "which";
+    if (SystemInfo.isWindows) {
+      cmd = "C:\\Windows\\System32\\where.exe";
+    }
+    ProcessOutput out;
+    try {
+      out = OntSystemUtil.getProcessOutput(cmd, "ontdev");
+      if (out.getExitCode() != 0) return "";
+
+      List<String> lines = out.getStdoutLines(true);
+      return lines.size() == 2 ? lines.get(1) : "";
+    } catch (ExecutionException ignored) {
+    }
+    return "";
+  }
+
   public GeneralCommandLine makeInitCmd(String wd) {
     GeneralCommandLine commandLine = new OntCommandLine();
     commandLine.setExePath(bin.getAbsolutePath());
@@ -93,7 +111,7 @@ public class OntPunica {
 
   public GeneralCommandLine makeDebugCmd(String ticket) {
     GeneralCommandLine cmd = new OntCommandLine();
-    cmd.setExePath("/Users/hsy/ws/ont/ontdev/bin/ontdev.js");
+    cmd.setExePath(bin.getAbsolutePath());
     cmd.addParameters("debug");
     cmd.addParameter("--ticket");
     cmd.addParameter(ticket);

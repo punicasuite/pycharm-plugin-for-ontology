@@ -55,6 +55,10 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
     myModel.reset(project);
 
     txPath.setText(OntSdkSettings.getInstance().PUNICA_BIN);
+    if (txPath.getText().equals("")) {
+      txPath.setText(OntPunica.getSuggestPath());
+    }
+
     btnChoose.addActionListener(this);
   }
 

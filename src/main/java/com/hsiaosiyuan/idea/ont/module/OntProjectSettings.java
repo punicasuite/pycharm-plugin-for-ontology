@@ -1,5 +1,7 @@
 package com.hsiaosiyuan.idea.ont.module;
 
+import com.hsiaosiyuan.idea.ont.punica.OntPunica;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -19,6 +21,9 @@ public class OntProjectSettings implements ActionListener {
   private PathChangedListener pathChangedListener;
 
   public OntProjectSettings() {
+
+    Logger.getInstance("ont").info("Suggest: " + OntPunica.getSuggestPath());
+    txPath.setText(OntPunica.getSuggestPath());
 
     txPath.getDocument().addDocumentListener(new DocumentListener() {
       @Override
@@ -67,6 +72,7 @@ public class OntProjectSettings implements ActionListener {
     String curPath = txPath.getText().trim();
     if (!prevPath.equals(curPath) && pathChangedListener != null) {
       pathChangedListener.run(txPath.getText().trim());
+      prevPath = curPath;
     }
   }
 

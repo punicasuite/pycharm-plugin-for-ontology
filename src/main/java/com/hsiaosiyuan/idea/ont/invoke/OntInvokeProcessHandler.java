@@ -79,7 +79,7 @@ public class OntInvokeProcessHandler extends OntProcessHandler {
       public void run(@NotNull ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
 
-        AbiFile abiFile = AbiIndexManager.getInstance().src2abi.get(src);
+        AbiFile abiFile = AbiIndexManager.getInstance().getAbi(src);
         try {
           OntNetworkConfig networkConfig = OntNetworkConfig.getInstance(project);
           handler.notifyTextAvailableWithTimestamp("Sending to " + networkConfig.getRpcAddr(), ProcessOutputTypes.SYSTEM);

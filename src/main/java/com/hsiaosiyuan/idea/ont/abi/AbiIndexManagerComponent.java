@@ -44,7 +44,8 @@ public class AbiIndexManagerComponent implements ProjectComponent, BulkFileListe
     Project project = OntConfigComponent.getProjectByFile(evt.getFile());
     if (project == null) return;
 
-    AbiFile idx = AbiIndexManager.getInstance().src2abi.get(Objects.requireNonNull(evt.getFile()).getPath());
+    String path = Objects.requireNonNull(evt.getFile()).getPath();
+    AbiFile idx = AbiIndexManager.getInstance().getAbi(path);
     if (idx == null) return;
 
     idx.destroy();
