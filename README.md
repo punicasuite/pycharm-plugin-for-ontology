@@ -22,4 +22,4 @@ Adds support for Ontology Smart Contract Development:
       <img width="450" src="./doc/imgs/install-1.png" />
 
 
-4. when the project creating wizard appears, it will ask you where does the `ontdev` locate at. By default if ontdev is installed correctly, the path will be detected automatically otherwise you could find it out manually via `which ontdev` on *nix or `where.exe` on windows.
+4. when the project creating wizard appears, it will ask you where does the `ontdev` locate at. By default if ontdev is installed correctly, the path will be detected automatically otherwise you could find it out manually via `which ontdev` on *nix or `where.exe ontdev` on windows.
