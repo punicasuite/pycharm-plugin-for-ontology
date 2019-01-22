@@ -15,7 +15,7 @@ Adds support for Ontology Smart Contract Development:
 
 3. [Download](https://github.com/punicasuite/pycharm-plugin-for-ontology/releases) and install the plugin's jar file from disk.
 
-   1. In the **Settings/Preferences** dialog OSX shortcut `⌘,` Windows shortcut `Ctrl+Alt+S`, select Plugins
+   1. In the **Settings/Preferences** dialog OSX shortcut `⌘,` Windows shortcut `Ctrl+Alt+S`, select **Plugins**
   
    2. In the **Plugins** dialog, click <img width="16" src="https://www.jetbrains.com/help/img/idea/2018.3/icons.general.gearPlain.svg@2x.png" /> and then click **Install Plugin from Disk..**
    
