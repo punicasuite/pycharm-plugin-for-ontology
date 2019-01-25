@@ -2,6 +2,7 @@ package com.hsiaosiyuan.idea.ont.punica;
 
 import com.hsiaosiyuan.idea.ont.module.OntModuleBuilder;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
+import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
@@ -55,6 +56,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     try {
       reloadConfig(evt);
       reloadDeployConfig(evt);
+      reloadInvokeConfig(evt);
       reloadNetworkConfig(evt);
     } catch (IOException e) {
       if (OntModuleBuilder.getIsBuilding()) return;
@@ -84,6 +86,18 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     if (!path.toString().equals(evt.getPath())) return;
 
     OntDeployConfig.getInstance(project).load();
+  }
+
+  private void reloadInvokeConfig(VFileEvent evt) throws IOException {
+    Project project = getProjectByFile(evt.getFile());
+    if (project == null) return;
+
+    if (project.isDisposed()) return;
+
+    Path path = OntInvokeConfig.getInstance(project).getFilePath();
+    if (!path.toString().equals(evt.getPath())) return;
+
+    OntInvokeConfig.getInstance(project).load();
   }
 
   private void reloadNetworkConfig(VFileEvent evt) throws IOException {

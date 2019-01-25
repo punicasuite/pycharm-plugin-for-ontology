@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
-import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
+import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.hsiaosiyuan.idea.ont.run.OntProcessHandler;
@@ -84,7 +84,7 @@ public class OntInvokeProcessHandler extends OntProcessHandler {
           OntNetworkConfig networkConfig = OntNetworkConfig.getInstance(project);
           handler.notifyTextAvailableWithTimestamp("Sending to " + networkConfig.getRpcAddr(), ProcessOutputTypes.SYSTEM);
 
-          Object resp = OntDeployConfig.getInstance(project).invoke(abiFile.hash, fn, invokeDialog.getPreExec(), invokeDialog.getWaitResult());
+          Object resp = OntInvokeConfig.getInstance(project).invoke(abiFile.hash, fn, invokeDialog.getPreExec(), invokeDialog.getWaitResult());
           handler.notifyTextAvailableWithTimestamp("Response: " + JSON.toJSONString(resp, true), ProcessOutputTypes.SYSTEM);
           handler.notifyProcessTerminated(0);
           notifier.notifySuccess("Ontology", "Contract invoked successfully.");

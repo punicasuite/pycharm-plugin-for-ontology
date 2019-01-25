@@ -7,8 +7,6 @@ import com.github.ontio.OntSdk;
 import com.github.ontio.account.Account;
 import com.github.ontio.common.Helper;
 import com.github.ontio.core.transaction.Transaction;
-import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
-import com.github.ontio.smartcontract.neovm.abi.BuildParams;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nullable;
@@ -89,7 +87,7 @@ public class OntDeployConfig {
     return password.getString(acc);
   }
 
-  public OntSdk prepareSdk() throws IOException {
+  public static OntSdk prepareSdk(Project project) throws IOException {
     OntSdk sdk = OntSdk.getInstance();
 
     OntNetworkConfig networkConfig = OntNetworkConfig.getInstance(project);
@@ -100,9 +98,19 @@ public class OntDeployConfig {
     return sdk;
   }
 
-  public Object sendTx(Transaction tx, boolean preExec, boolean wait) throws Exception {
-    OntSdk sdk = prepareSdk();
-    sdk.signTx(tx, new Account[][]{{sdk.getWalletMgr().getAccount(payer, getPwd(payer))}});
+  public Object deploy(String code) throws Exception {
+    OntSdk sdk = prepareSdk(project);
+
+    // TODO:: needStorage
+    Transaction tx = sdk.vm().makeDeployCodeTransaction(
+        code, true, name, version, author, email, desc, payer, gasLimit, gasPrice);
+
+    return sendTx(project, tx, false, true, payer, getPwd(payer));
+  }
+
+  public static Object sendTx(Project project, Transaction tx, boolean preExec, boolean wait, String payer, String pwd) throws Exception {
+    OntSdk sdk = prepareSdk(project);
+    sdk.signTx(tx, new Account[][]{{sdk.getWalletMgr().getAccount(payer, pwd)}});
     String txHex = Helper.toHexString(tx.toArray());
     if (wait) {
       return sdk.getRpc().sendRawTransactionSync(txHex);
@@ -111,30 +119,5 @@ public class OntDeployConfig {
       return sdk.getRpc().sendRawTransactionPreExec(txHex);
     }
     return sdk.getRpc().sendRawTransaction(txHex);
-  }
-
-  public Object deploy(String code) throws Exception {
-    OntSdk sdk = prepareSdk();
-
-    // TODO:: needStorage
-    Transaction tx = sdk.vm().makeDeployCodeTransaction(
-        code, true, name, version, author, email, desc, payer, gasLimit, gasPrice);
-
-    return sendTx(tx, false, true);
-  }
-
-  public Object invoke(String contract, AbiFunction fn, boolean preExec, boolean wait) throws Exception {
-    OntSdk sdk = prepareSdk();
-
-    byte[] params = BuildParams.serializeAbiFunction(fn);
-    Transaction tx = sdk.vm().makeInvokeCodeTransaction(
-        Helper.reverse(contract),
-        null,
-        params,
-        payer,
-        gasLimit,
-        gasPrice);
-
-    return sendTx(tx, preExec, wait);
   }
 }
