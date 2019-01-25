@@ -3,15 +3,11 @@ package com.hsiaosiyuan.idea.ont.debug;
 import com.alibaba.fastjson.JSON;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
-import com.hsiaosiyuan.idea.ont.invoke.OntInvokeDialog;
-import com.hsiaosiyuan.idea.ont.punica.OntCommandLine;
-import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaFactory;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -61,7 +57,7 @@ public class OntDebugAgent {
 
   private JSONObject params;
 
-  public OntDebugAgent(XDebugSession session, ConsoleView consoleView, String src, String method) {
+  public OntDebugAgent(XDebugSession session, ConsoleView consoleView, String src, String method, JSONObject params) {
     this.session = session;
     this.project = session.getProject();
     this.consoleView = consoleView;
@@ -71,6 +67,7 @@ public class OntDebugAgent {
     breakpoints = new ArrayList<>();
     pendings = new HashMap<>();
     executorService = Executors.newFixedThreadPool(2);
+    this.params = params;
   }
 
   @Nullable
@@ -133,7 +130,7 @@ public class OntDebugAgent {
     OntNotifier notifier = OntNotifier.getInstance(project);
 
     final OntDebugAgent agent = this;
-    final AtomicInteger time = new AtomicInteger(3);
+    final AtomicInteger times = new AtomicInteger(3);
     ProgressManager.getInstance().run(new Task.Backgroundable(project, "Starting Debug Server") {
       @Override
       public void run(@NotNull ProgressIndicator indicator) {
@@ -144,10 +141,10 @@ public class OntDebugAgent {
 
           while (true) {
             Thread.sleep(2000);
-            if (lockFile.exists() || time.get() == 0) {
+            if (lockFile.exists() || times.get() == 0) {
               break;
             }
-            time.set(time.get() - 1);
+            times.set(times.get() - 1);
           }
 
           if (lockFile.exists()) {
@@ -167,10 +164,9 @@ public class OntDebugAgent {
     });
   }
 
-  @SuppressWarnings("ResultOfMethodCallIgnored")
-  public void stop() throws Exception {
+  public void stop() {
     processHandler.getProcess().destroyForcibly();
-    getLockFile().delete();
+    releaseLock();
     if (socket != null) {
       socket.disconnect();
     }
@@ -372,42 +368,7 @@ public class OntDebugAgent {
     return send("start", data, true);
   }
 
-  private CompletableFuture<String> showDialog() {
-    CompletableFuture<String> future = new CompletableFuture<>();
-    SwingUtilities.invokeLater(() -> {
-      OntInvokeDialog invokeDialog;
-      try {
-        invokeDialog = new OntInvokeDialog(project, src, method, true);
-      } catch (Exception e) {
-        getNotifier().notifyError("Ontology", e);
-        future.complete("Unable to make invoke dialog");
-        return;
-      }
-
-      if (!invokeDialog.showAndGet()) {
-        future.complete("User canceled");
-        return;
-      }
-
-      params = invokeDialog.getDebugParams();
-      future.complete(null);
-    });
-    return future;
-  }
-
   private void setupAndStart() throws Exception {
-    String errMsg = showDialog().get();
-
-    if (errMsg != null) {
-      if (errMsg.equals("User canceled")) {
-        processHandler.notifyTextAvailable("User canceled\n", ProcessOutputTypes.SYSTEM);
-        session.stop();
-      } else {
-        getNotifier().notifyError("Ontology", errMsg);
-      }
-      return;
-    }
-
     init()
         .thenApply((ret) -> setBreakpoints())
         .thenApply((ret) -> startMethod()).get();

@@ -1,0 +1,178 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* remove scrollbar space */
+  background: transparent; /* optional: just make scrollbar invisible */
+}
+
+.err {
+  display: none;
+  color: #ea212d;
+  padding-top: 5px;
+}
+
+.editor {
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  height: 80vh;
+}
+
+.editor > .left {
+  width: 50%;
+  height: 80vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+
+.editor > .left > i {
+  display: block;
+  width: 5px;
+  height: 80vh;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #f0f0f0;
+  border-left: 1px solid #d0d0d0;
+  border-right: 1px solid #d0d0d0;
+  cursor: col-resize;
+}
+
+.editor > .right {
+  width: 50%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  overflow: auto;
+  height: 80vh;
+}
+
+input,
+select {
+  box-sizing: border-box;
+}
+
+select {
+  width: auto;
+}
+
+input[type="text"] {
+  width: 100%;
+  min-width: 120px;
+  height: 26px;
+  text-indent: 5px;
+}
+
+label {
+  display: inline-block;
+  cursor: pointer;
+  height: 26px;
+  line-height: 26px;
+}
+
+label > * {
+  display: inline-block !important;
+  float: none !important;
+  vertical-align: middle;
+}
+
+.editor > .right > table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.editor > .right > table thead td {
+  background: #f9f9f9 url(./imgs/grid3-hrow.gif) repeat-x 0 bottom;
+  border-right: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.editor > .right > table thead td:first-child {
+  width: 80px;
+}
+
+.editor > .right > table td {
+  border-right: 1px solid #ddd;
+}
+
+.editor > .right > table td .inner {
+  padding: 8px 5px;
+  box-sizing: border-box;
+}
+
+.editor > .right > table tbody td {
+  border-bottom: 1px solid #ddd;
+}
+
+.editor > .right > table tfoot {
+  text-align: right;
+}
+
+.editor > .right > table tfoot td {
+  padding-top: 10px;
+  padding-right: 10px;
+  border: 0;
+}
+
+button {
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.button.add {
+  background: url("./imgs/add.svg") no-repeat center !important;
+  background-size: 80% !important;
+  vertical-align: top !important;
+}
+
+.button.del {
+  background: url("./imgs/delete.svg") no-repeat center !important;
+  background-size: 80% !important;
+  vertical-align: top !important;
+}
+
+.ztree li a.curSelectedNode {
+  background-color: #d9e8fb;
+  border: 1px blue solid;
+}
+
+.bottom-buttons {
+  position: absolute;
+  left: 0;
+  bottom: 15px;
+  padding-left: 10px;
+}
+
+.bottom-buttons .row {
+  padding-top: 10px;
+}
+
+.bottom-buttons button {
+  margin-right: 10px;
+}
+
+button,
+select,
+input {
+  background: none;
+  border: 1px solid #ddd;
+}
+
+button {
+  border: 1px solid #408af1;
+  background: #d9e8fb;
+}

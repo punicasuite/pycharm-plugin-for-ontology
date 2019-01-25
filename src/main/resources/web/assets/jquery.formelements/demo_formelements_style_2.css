@@ -1,0 +1,120 @@
+/*
+    select box
+*/
+
+.formelements_select {
+    position: relative;
+    display: inline-block;
+    height:40px;
+    outline: 1px solid #ddd;
+    width: 200px;
+    margin:0 10px 10px 0;
+}
+
+.formelements_select .formelements_select_display {
+    height: 100%;
+    padding:10px;
+    font-size: 100%;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.formelements_select .formelements_listwrap {
+    position: absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background-color: #fff;
+
+    max-height: 309px;
+    overflow: auto;
+
+    display: none;
+
+    box-shadow: rgba(0,0,0,0.3) 0px 0px 3px;
+
+    z-index: 1000;
+}
+
+.formelements_select.formelements_tinyscrollbar .formelements_listwrap {
+    height: 309px;
+    overflow: hidden;
+}
+
+.formelements_select .formelements_searchwrap {
+    position: relative;
+    border-bottom: 1px solid #eee;
+    z-index: 2;
+}
+.formelements_select .formelements_searchwrap input {
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: none;
+
+    position: relative;
+    line-height: 20px;
+    padding:5px;
+}
+
+.formelements_select .formelements_select_contentwrap {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding-top: 30px;
+    margin-top: -30px;
+}
+.formelements_select ul {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.formelements_select ul li {
+    position: relative;
+    line-height: 20px;
+    padding: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom:1px solid #eee;
+
+    z-index: 1;
+}
+.formelements_select ul li:hover {
+    background-color: #f7f7f7;
+}
+.formelements_select ul li.active {
+    background-color: #f7f7f7;
+}
+.formelements_select ul li.active:hover {}
+
+.formelements_select ul li.placeholder {
+    color:#999;
+    margin-bottom: -1px;
+    border-bottom: 1px dashed #ddd;
+    z-index: 2;
+}
+.formelements_select ul li.search_hidden {
+    display: none;
+}
+
+.formelements_select ul li[disabled='disabled'] {}
+.formelements_select ul li[disabled='disabled']:hover {}
+
+.formelements_select ul li.formelements_optgroup {
+    background-color: transparent;
+    margin:0;
+    padding:0;
+    border: none;
+}
+
+.formelements_select ul li.formelements_optgroup span.formelements_optgroup_label {
+    display: block;
+    padding: 5px 5px 0;
+    font-weight: bold;
+}
+
+.formelements_select ul li.formelements_optgroup li {
+    text-indent: 5px;
+}
