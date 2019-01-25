@@ -22,6 +22,8 @@ public class OntInvokeDialogWrap extends OntWebView {
 
   private Invocation invocation;
 
+  private static HashMap<String, ParamCacheItem> prevParams = new HashMap<>();
+
   public OntInvokeDialogWrap(String src, String method) {
     super();
 
@@ -83,6 +85,14 @@ public class OntInvokeDialogWrap extends OntWebView {
         JSONObject pv = new JSONObject();
         pv.put("type", "String");
         pv.put("value", "");
+
+        String ck = AbiFile.extractSrcFilename(srcPath) + ":" + methodName + ":" + p.name;
+        ParamCacheItem prev = prevParams.get(ck);
+        if (prev != null) {
+          pv.put("type", prev.type);
+          pv.put("value", prev.val);
+        }
+
         rootValue.put(p.name, pv);
       });
 
@@ -167,19 +177,45 @@ public class OntInvokeDialogWrap extends OntWebView {
       closeDialog();
     }
 
+    private void rememberParams() {
+      try {
+        JSONObject rootParam = OntInvokeParam.parseRoot(params);
+        JSONObject ps = rootParam.getJSONObject("value");
+        ps.keySet().forEach(k -> {
+          String ck = AbiFile.extractSrcFilename(srcPath) + ":" + methodName + ":" + k;
+          JSONObject p = ps.getJSONObject(k);
+          Object v = p.get("value");
+          ParamCacheItem pc = new ParamCacheItem(p.getString("type"), v);
+          prevParams.put(ck, pc);
+        });
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
     public void invoke(String params, Boolean preExec) {
       this.params = params;
       this.doInvokeFlag = true;
       this.preExec = preExec;
-      System.out.println(params);
-      System.out.println(preExec);
+      rememberParams();
       done();
     }
 
     public void debug(String params) {
       this.params = params;
       this.doDebugFlag = true;
+      rememberParams();
       done();
+    }
+  }
+
+  public class ParamCacheItem {
+    public String type;
+    public Object val;
+
+    public ParamCacheItem(String type, Object val) {
+      this.type = type;
+      this.val = val;
     }
   }
 }
