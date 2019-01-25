@@ -134,13 +134,13 @@ button {
 }
 
 .button.add {
-  background: url("./imgs/add.svg") no-repeat center !important;
+  background: url("./imgs/add.png") no-repeat center !important;
   background-size: 80% !important;
   vertical-align: top !important;
 }
 
 .button.del {
-  background: url("./imgs/delete.svg") no-repeat center !important;
+  background: url("./imgs/delete.png") no-repeat center !important;
   background-size: 80% !important;
   vertical-align: top !important;
 }
