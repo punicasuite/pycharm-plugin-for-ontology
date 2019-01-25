@@ -101,9 +101,8 @@ public class OntDeployConfig {
   public Object deploy(String code) throws Exception {
     OntSdk sdk = prepareSdk(project);
 
-    // TODO:: needStorage
     Transaction tx = sdk.vm().makeDeployCodeTransaction(
-        code, true, name, version, author, email, desc, payer, gasLimit, gasPrice);
+        code, needStorage, name, version, author, email, desc, payer, gasLimit, gasPrice);
 
     return sendTx(project, tx, false, true, payer, getPwd(payer));
   }

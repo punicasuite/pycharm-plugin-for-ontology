@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
@@ -25,6 +27,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
   private JTextField txDesc;
   private JComboBox cbPayer;
   private JComboBox cbNetworks;
+  private JCheckBox chkNeedStorage;
 
   private Project project;
 
@@ -51,6 +54,8 @@ public class OntDeployConfigDialog extends DialogWrapper {
     OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
     netCfg.networks.keySet().forEach(k -> cbNetworks.addItem(new Item(k, k)));
     cbNetworks.setSelectedItem(new Item(netCfg.defaultNet, netCfg.defaultNet));
+
+    chkNeedStorage.setSelected(config.needStorage);
   }
 
   @Nullable
@@ -71,6 +76,7 @@ public class OntDeployConfigDialog extends DialogWrapper {
       config.email = txEmail.getText().trim();
       config.desc = txDesc.getText().trim();
       config.payer = ((Item) Objects.requireNonNull(cbPayer.getSelectedItem())).getId();
+      config.needStorage = chkNeedStorage.isSelected();
       config.save();
 
       OntNetworkConfig netCfg = OntNetworkConfig.getInstance(project);
