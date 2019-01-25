@@ -132,6 +132,9 @@ public class OntInvokeDialogWrap extends OntWebView {
 
       Object v = parameters.get(param.name);
       tp.type = paramsDict.getJSONObject(param.name).getString("type");
+      if (tp.type.equals("Address")) {
+        tp.type = "ByteArray";
+      }
       tp.setValue(v);
 
       fun.parameters.add(tp);

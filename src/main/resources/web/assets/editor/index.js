@@ -33,11 +33,10 @@ $(function() {
     switch (type) {
       case "String":
       case "Integer":
-      case "Long":
       case "Address":
       case "Boolean":
       case "ByteArray": {
-        if (type === "Integer" || type === "Long") {
+        if (type === "Integer") {
           icon = "green.gif";
         } else if (type === "Boolean") {
           icon = "yellow.gif";
@@ -66,12 +65,11 @@ $(function() {
     switch (params.type) {
       case "String":
       case "Integer":
-      case "Long":
       case "Address":
       case "Boolean":
       case "ByteArray": {
         var icon = "blue.gif";
-        if (params.type === "Integer" || params.type === "Long") {
+        if (params.type === "Integer") {
           icon = "green.gif";
         } else if (params.type === "Boolean") {
           icon = "yellow.gif";
@@ -138,7 +136,6 @@ $(function() {
     switch (node.dataType) {
       case "String":
       case "Integer":
-      case "Long":
       case "Address":
       case "Boolean":
       case "ByteArray": {
@@ -316,7 +313,6 @@ $(function() {
     this.Types = {
       String: "String",
       Integer: "Integer",
-      Long: "Long",
       Address: "Address",
       Boolean: "Boolean",
       ByteArray: "ByteArray",
@@ -491,7 +487,7 @@ $(function() {
       if (!/^[a-fA-F0-9]+$/.test(v)) return "Deformed: contains invalid chars";
     } else if (t === "Address" && v.length !== 34 && v.length !== 40) {
       return "Deformed: invalid length";
-    } else if ((t === "Integer" || t === "Long") && !/^[1-9]\d*$/.test(v)) {
+    } else if (t === "Integer" && !/^[1-9]\d*$/.test(v)) {
       return "Deformed: invalid number";
     }
     return true;
