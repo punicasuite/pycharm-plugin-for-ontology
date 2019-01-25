@@ -41,9 +41,10 @@ public class OntDeployProcessHandler extends OntProcessHandler {
     return null;
   }
 
-  public void start(final Project project, final String src) {
+  public void start(final Project project, final String avmPath) {
     OntNotifier notifier = OntNotifier.getInstance(project);
 
+    String src = AbiFile.avmPath2SrcPath(avmPath);
     String filename = AbiFile.extractSrcFilename(src);
 
     notifyTextAvailableWithTimestamp("Deploying contract: " + filename, ProcessOutputTypes.SYSTEM);

@@ -50,5 +50,11 @@
                 description="Compile ontology smart contracts">
             <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
         </action>
+        <action id="com.hsiaosiyuan.action.DeployAction"
+                class="com.hsiaosiyuan.idea.ont.deploy.OntDeployAction"
+                text="Deploy contract"
+                description="Deploy ontology smart contract">
+            <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>
