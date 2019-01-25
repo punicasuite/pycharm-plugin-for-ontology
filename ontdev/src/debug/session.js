@@ -46,7 +46,7 @@ module.exports.DebugSession = class DebugSession {
     Object.keys(points).forEach(path => this.debugger.clearBreakpoints(path));
     Object.keys(points).forEach(path => {
       const lines = points[path];
-      lines.forEach(line => this.debugger.setBreakpoint(path, line));
+      lines.forEach(line => this.debugger.setBreakpoint(path, line + 1));
     });
     this.conn.emit("RESP", { id, error: 0 });
   }
@@ -88,7 +88,6 @@ module.exports.DebugSession = class DebugSession {
         resp.variables = vsVariables;
       } else {
         const [head, ...tail] = variableReference.split(".");
-
         const variables = this.debugger.getVariables(Number(head));
         const vsVariables = this.getVariablesDeep([head], tail, variables);
 
@@ -248,6 +247,7 @@ module.exports.DebugSession = class DebugSession {
   }
 
   onBreakpoint(bp) {
+    bp.line -= 1;
     this.conn.emit("BP", bp);
   }
 
