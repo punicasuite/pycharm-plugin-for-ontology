@@ -47,6 +47,12 @@ public class OntPunicaConfig {
     password = obj.getJSONObject("password");
   }
 
+  public void reload(String path) throws IOException {
+    path = Paths.get(path).normalize().toString();
+    if (!getFilePath().toString().equals(path)) return;
+    load();
+  }
+
   public void save() throws IOException {
     JSONObject obj = JSON.parseObject(new String(getRaw()));
     obj.put("defaultWallet", defaultWallet);

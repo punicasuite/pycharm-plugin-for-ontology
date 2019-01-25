@@ -20,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 public class OntConfigComponent implements ProjectComponent, BulkFileListener {
@@ -70,10 +69,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntPunicaConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntPunicaConfig.getInstance(project).load();
+    OntPunicaConfig.getInstance(project).reload(evt.getPath());
   }
 
   private void reloadDeployConfig(VFileEvent evt) throws IOException {
@@ -82,10 +78,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntDeployConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntDeployConfig.getInstance(project).load();
+    OntDeployConfig.getInstance(project).reload(evt.getPath());
   }
 
   private void reloadInvokeConfig(VFileEvent evt) throws IOException {
@@ -94,10 +87,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntInvokeConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntInvokeConfig.getInstance(project).load();
+    OntInvokeConfig.getInstance(project).reload(evt.getPath());
   }
 
   private void reloadNetworkConfig(VFileEvent evt) throws IOException {
@@ -106,10 +96,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntNetworkConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntNetworkConfig.getInstance(project).load();
+    OntNetworkConfig.getInstance(project).reload(evt.getPath());
   }
 
   @Nullable
