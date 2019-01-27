@@ -13,7 +13,6 @@ import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.*;
 import com.intellij.execution.ui.ConsoleView;
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ToolWindow;

@@ -2,6 +2,8 @@ package com.hsiaosiyuan.idea.ont.deploy;
 
 import com.alibaba.fastjson.JSON;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
+import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
+import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
@@ -41,6 +43,43 @@ public class OntDeployProcessHandler extends OntProcessHandler {
     return null;
   }
 
+  @Nullable
+  private String getHash(Project project, String srcPath) {
+    OntNotifier notifier = OntNotifier.getInstance(project);
+    AbiFile abiFile = AbiIndexManager.getInstance().getAbi(srcPath);
+    if (abiFile == null) {
+      notifier.notifyError("Ontology", "Unable to load abi file: " + srcPath);
+      return null;
+    }
+
+    return abiFile.hash;
+  }
+
+  private int isContractAlreadyDeployed(Project project, String srcPath) {
+    OntNotifier notifier = OntNotifier.getInstance(project);
+
+    OntNetworkConfig networkConfig;
+    try {
+      networkConfig = OntNetworkConfig.getInstance(project);
+    } catch (IOException e) {
+      notifier.notifyError("Ontology", "Unable to load network config: " + e.getMessage());
+      return -1;
+    }
+
+    String hash = getHash(project, srcPath);
+    if (hash == null) return -1;
+
+    boolean isDeployed;
+    String rpcAddr = networkConfig.getRpcAddr();
+    try {
+      isDeployed = OntPunica.isContractDeployed(rpcAddr, hash);
+    } catch (Exception e) {
+      notifier.notifyError("Ontology", "Unable to query contract state via rpc " + rpcAddr + ", please check you network");
+      return -1;
+    }
+    return isDeployed ? 1 : 0;
+  }
+
   public void start(final Project project, final String avmPath) {
     OntNotifier notifier = OntNotifier.getInstance(project);
 
@@ -48,6 +87,20 @@ public class OntDeployProcessHandler extends OntProcessHandler {
     String filename = AbiFile.extractSrcFilename(src);
 
     notifyTextAvailableWithTimestamp("Deploying contract: " + filename, ProcessOutputTypes.SYSTEM);
+
+    int state = isContractAlreadyDeployed(project, src);
+    if (state == 1) {
+      String hash = getHash(project, src);
+      notifyTextAvailableWithTimestamp("Contract already deployed at: " + hash, ProcessOutputTypes.STDERR);
+      notifyProcessTerminated(0);
+      return;
+    } else if (state == -1) {
+      // error occurs when querying the state of contract
+      notifyTextAvailableWithTimestamp("Errors occur, terminated.", ProcessOutputTypes.SYSTEM);
+      notifyProcessTerminated(1);
+      return;
+    }
+
     notifyTextAvailableWithTimestamp("Waiting for user's interaction...", ProcessOutputTypes.SYSTEM);
 
     OntDeployConfigDialog dialog;
