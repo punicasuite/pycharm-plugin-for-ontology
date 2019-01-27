@@ -848,6 +848,19 @@ $(function() {
     }
   };
 
+  Editor.prototype._editFirstParameter = function() {
+    if (this.nodesData.children.length === 0) return;
+
+    console.log(this.nodesData.children[0]);
+    var id = this.nodesData.children[0].id;
+    var nodes = this.zTree.getNodesByParam("id", id);
+    if(nodes.length !== 1) return;
+
+    var node = nodes[0];
+    this.zTree.selectNode(node);
+    this.nodeEditor.update(node);
+  };
+
   Editor.prototype.attach = function() {
     if (this.zTree !== null) return;
 
@@ -855,6 +868,7 @@ $(function() {
     this._initDom();
     this._initZTree();
     this._hideRightPanelIfNoParameter();
+    this._editFirstParameter();
   };
 
   window.Editor = Editor;

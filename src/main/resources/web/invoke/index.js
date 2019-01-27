@@ -17,6 +17,10 @@ $(function() {
         a: {
           type: "Map",
           value: {}
+        },
+        b: {
+          type: "Boolean",
+          value: false
         }
       }
     };
