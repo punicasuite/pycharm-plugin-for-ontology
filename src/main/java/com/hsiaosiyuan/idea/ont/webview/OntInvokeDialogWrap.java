@@ -51,6 +51,13 @@ public class OntInvokeDialogWrap extends OntWebView {
     webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
       if (newState == Worker.State.SUCCEEDED) {
         JSObject win = (JSObject) webEngine.executeScript("window");
+
+        // update hash
+        String hash = getContractHash();
+        win.setMember("_contract_hash_", hash);
+        webEngine.executeScript("updateContractHash()");
+
+        // show editor
         win.setMember("invocation", invocation);
         win.setMember("_params_", makeParameters());
         webEngine.executeScript("setupParams()");
@@ -68,6 +75,14 @@ public class OntInvokeDialogWrap extends OntWebView {
       throw new Exception("Unrecognized method: " + methodName + " in via ABI: " + srcPath);
     }
     return fn;
+  }
+
+  private String getContractHash() {
+    AbiFile abiFile = AbiIndexManager.getInstance().getAbi(srcPath);
+    if (abiFile == null) {
+      return "";
+    }
+    return abiFile.hash;
   }
 
   private String makeParameters() {

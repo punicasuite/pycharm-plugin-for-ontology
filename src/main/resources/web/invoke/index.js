@@ -7,6 +7,12 @@ $(function() {
     editor.attach();
   };
 
+  window.updateContractHash = function() {
+    // params from java side
+    var hash = window._contract_hash_;
+    $("#contract-hash").html(hash);
+  };
+
   var testRun = function() {
     if (!/debug/.test(window.location.href)) return;
 

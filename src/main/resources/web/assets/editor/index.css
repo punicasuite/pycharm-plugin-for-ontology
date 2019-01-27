@@ -187,3 +187,8 @@ input[readonly] {
   color: #ccc;
   cursor: not-allowed;
 }
+
+h3 {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
