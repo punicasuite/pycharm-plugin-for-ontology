@@ -8,8 +8,8 @@ $(function() {
   };
 
   var testRun = function() {
-    if(!/debug/.test(window.location.href)) return;
-    
+    if (!/debug/.test(window.location.href)) return;
+
     var params = {
       type: "Map",
       name: "Parameters",

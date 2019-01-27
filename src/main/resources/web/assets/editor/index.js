@@ -195,7 +195,10 @@ $(function() {
     }
 
     var nodeEl = $("#" + treeNode.tId + "_span");
-    var html = fmt("<span class='button add' id='{0}'><i class='icon-plus-sign'></i></span>", id);
+    var html = fmt(
+      "<span class='button add' id='{0}'><i class='icon-plus-sign'></i></span>",
+      id
+    );
     nodeEl.after(html);
 
     var me = this;
@@ -226,7 +229,10 @@ $(function() {
     }
 
     var nodeEl = $("#" + treeNode.tId + "_span");
-    var html = fmt("<span class='button del' id='{0}'><i class='icon-remove-sign'></i></span>", id);
+    var html = fmt(
+      "<span class='button del' id='{0}'><i class='icon-remove-sign'></i></span>",
+      id
+    );
     nodeEl.after(html);
 
     var me = this;
@@ -773,14 +779,29 @@ $(function() {
     this._updateResizerHeight();
   };
 
+  Editor.prototype._delegatesRadioIconClick = function() {
+    $(".formelements_check+span").click();
+  };
+
+  // the plugin `formelement` has a bug on it's radio's add-on:
+  // click the span changes the state of underling radio but click
+  // the fake icon does not work, use below code to delegate
+  // the click events
+  Editor.prototype._fixRadioButton = function() {
+    $(".formelements_check").off("click", this._delegatesRadioIconClick);
+    $(".formelements_check").on("click", this._delegatesRadioIconClick);
+  };
+
   Editor.prototype.decorateInputs = function() {
     $('input[type="checkbox"], input[type="radio"], select').formelements();
+    this._fixRadioButton();
   };
 
   Editor.prototype.refreshDecorates = function() {
     $('input[type="checkbox"], input[type="radio"], select').formelements(
       "refresh"
     );
+    this._fixRadioButton();
   };
 
   Editor.prototype._beforeNodeClick = function(id, node) {
