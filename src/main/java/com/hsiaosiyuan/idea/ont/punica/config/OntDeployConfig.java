@@ -9,13 +9,15 @@ import com.github.ontio.common.Helper;
 import com.github.ontio.core.transaction.Transaction;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.intellij.openapi.project.Project;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.util.concurrency.Semaphore;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class OntDeployConfig {
   public static final String FILENAME = "default-config.json";
@@ -88,9 +90,25 @@ public class OntDeployConfig {
     Files.write(getFilePath(), raw.getBytes());
   }
 
-  @Nullable
   public String getPwd(String acc) {
-    return password.getString(acc);
+    String pwd = password.getString(acc);
+    if (pwd != null && !pwd.equals("")) return pwd;
+
+    Semaphore sm = new Semaphore();
+    sm.down();
+
+    AtomicReference<String> password = new AtomicReference<>("");
+
+    SwingUtilities.invokeLater(() -> {
+      OntPasswordDialog dialog = new OntPasswordDialog(project, acc);
+      if (dialog.showAndGet()) {
+        password.set(dialog.getPassword());
+      }
+      sm.up();
+    });
+
+    sm.waitFor();
+    return password.get();
   }
 
   public static OntSdk prepareSdk(Project project) throws IOException {
@@ -110,7 +128,11 @@ public class OntDeployConfig {
     Transaction tx = sdk.vm().makeDeployCodeTransaction(
         code, needStorage, name, version, author, email, desc, payer, gasLimit, gasPrice);
 
-    return sendTx(project, tx, false, true, payer, getPwd(payer));
+    String pwd = getPwd(payer);
+    if (pwd.equals("")) {
+      throw new Exception("Unable to get password for account: " + payer);
+    }
+    return sendTx(project, tx, false, true, payer, pwd);
   }
 
   public static Object sendTx(Project project, Transaction tx, boolean preExec, boolean wait, String payer, String pwd) throws Exception {

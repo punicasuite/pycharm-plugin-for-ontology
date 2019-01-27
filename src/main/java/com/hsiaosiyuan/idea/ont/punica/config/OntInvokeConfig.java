@@ -77,8 +77,10 @@ public class OntInvokeConfig {
       boolean wait) throws Exception {
     OntSdk sdk = OntDeployConfig.prepareSdk(project);
 
-    String pwd = OntDeployConfig.getInstance(project).password.getString(defaultPayer);
-    if (pwd == null) throw new Exception("Cannot find password for account: " + defaultPayer);
+    String pwd = OntDeployConfig.getInstance(project).getPwd(defaultPayer);
+    if (pwd.equals("")) {
+      throw new Exception("Unable to get password for account: " + defaultPayer);
+    }
 
     byte[] params = BuildParams.serializeAbiFunction(fn);
     Transaction tx = sdk.vm().makeInvokeCodeTransaction(

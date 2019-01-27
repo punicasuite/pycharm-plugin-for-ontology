@@ -27,12 +27,12 @@
   position: relative;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  height: 80vh;
+  height: 70vh;
 }
 
 .editor > .left {
   width: 50%;
-  height: 80vh;
+  height: 70vh;
   position: absolute;
   top: 0;
   left: 0;
@@ -42,7 +42,7 @@
 .editor > .left > i {
   display: block;
   width: 5px;
-  height: 80vh;
+  height: 70vh;
   position: absolute;
   right: 0;
   top: 0;
