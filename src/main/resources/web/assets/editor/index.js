@@ -806,11 +806,7 @@ $(function() {
     return nodeToParam(this.zTree.getNodes()[0]);
   };
 
-  Editor.prototype.attach = function() {
-    if (this.zTree !== null) return;
-
-    this.nodesData = paramToNode(this.params, -1);
-    this._initDom();
+  Editor.prototype._initZTree = function() {
     this.zTree = $.fn.zTree.init(
       this.zTreeElem,
       {
@@ -843,6 +839,22 @@ $(function() {
       },
       this.nodesData
     );
+  };
+
+  Editor.prototype._hideRightPanelIfNoParameter = function() {
+    if (this.nodesData.children.length === 0) {
+      this.anchor.find("> .right").hide();
+      this.anchor.find("> .left > i").hide();
+    }
+  };
+
+  Editor.prototype.attach = function() {
+    if (this.zTree !== null) return;
+
+    this.nodesData = paramToNode(this.params, -1);
+    this._initDom();
+    this._initZTree();
+    this._hideRightPanelIfNoParameter();
   };
 
   window.Editor = Editor;
