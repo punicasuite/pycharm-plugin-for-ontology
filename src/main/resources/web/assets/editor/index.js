@@ -398,15 +398,9 @@ $(function() {
   NodeEditor.prototype._onBtnApplyClick = function() {
     if (this.node === null) return;
 
-    var doApply = function(yesno) {
-      if (yesno === "no") return;
-
-      this._validateForm();
-      if (this.table.find(".err").is(":visible")) return;
-      this._updateTree();
-    }.bind(this);
-
-    Ext.MessageBox.confirm("Confirm", "Are you sure?", doApply);
+    this._validateForm();
+    if (this.table.find(".err").is(":visible")) return;
+    this._updateTree();
   };
 
   NodeEditor.prototype.init = function() {
