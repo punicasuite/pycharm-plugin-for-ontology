@@ -195,7 +195,7 @@ $(function() {
     }
 
     var nodeEl = $("#" + treeNode.tId + "_span");
-    var html = fmt("<span class='button add' id='{0}'></span>", id);
+    var html = fmt("<span class='button add' id='{0}'><i class='icon-plus-sign'></i></span>", id);
     nodeEl.after(html);
 
     var me = this;
@@ -226,7 +226,7 @@ $(function() {
     }
 
     var nodeEl = $("#" + treeNode.tId + "_span");
-    var html = fmt("<span class='button del' id='{0}'></span>", id);
+    var html = fmt("<span class='button del' id='{0}'><i class='icon-remove-sign'></i></span>", id);
     nodeEl.after(html);
 
     var me = this;

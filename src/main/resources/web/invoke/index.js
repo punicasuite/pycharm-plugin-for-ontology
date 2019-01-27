@@ -7,6 +7,25 @@ $(function() {
     editor.attach();
   };
 
+  var testRun = function() {
+    if(!/debug/.test(window.location.href)) return;
+    
+    var params = {
+      type: "Map",
+      name: "Parameters",
+      value: {
+        a: {
+          type: "Map",
+          value: {}
+        }
+      }
+    };
+    editor = new Editor(document.getElementById("app"), params);
+    editor.attach();
+  };
+
+  testRun();
+
   $("#btn-invoke").on("click", function() {
     var rootParam = editor.getParams();
     var preExec = $('[name="pre-exec"]').prop("checked");

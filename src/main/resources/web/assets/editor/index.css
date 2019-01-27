@@ -134,14 +134,19 @@ button {
 }
 
 .button.add {
-  background: url("./imgs/add.png") no-repeat center !important;
-  background-size: 80% !important;
+  color: blue;
+  background-image: none !important;
   vertical-align: top !important;
 }
 
+.button.add i,
+.button.del i {
+  font-size: 16px;
+}
+
 .button.del {
-  background: url("./imgs/delete.png") no-repeat center !important;
-  background-size: 80% !important;
+  color: red;
+  background-image: none !important;
   vertical-align: top !important;
 }
 
