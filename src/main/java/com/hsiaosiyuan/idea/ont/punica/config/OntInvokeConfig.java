@@ -75,7 +75,9 @@ public class OntInvokeConfig {
       AbiFunction fn,
       boolean preExec,
       boolean wait) throws Exception {
+    
     OntSdk sdk = OntDeployConfig.prepareSdk(project);
+    if (sdk == null) return null;
 
     String pwd = OntDeployConfig.getInstance(project).getPwd(defaultPayer);
     if (pwd.equals("")) {

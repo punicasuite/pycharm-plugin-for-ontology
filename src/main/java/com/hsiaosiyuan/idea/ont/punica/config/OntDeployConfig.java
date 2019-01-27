@@ -8,8 +8,10 @@ import com.github.ontio.account.Account;
 import com.github.ontio.common.Helper;
 import com.github.ontio.core.transaction.Transaction;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
+import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.concurrency.Semaphore;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -111,19 +113,30 @@ public class OntDeployConfig {
     return password.get();
   }
 
+  @Nullable
   public static OntSdk prepareSdk(Project project) throws IOException {
+    OntPunicaConfig punicaConfig = OntPunicaConfig.getInstance(project);
+    Path walletPath = punicaConfig.getWalletPath();
+
+    if (!walletPath.toFile().exists()) {
+      OntNotifier notifier = OntNotifier.getInstance(project);
+      notifier.notifyError("Ontology", "Unable to find wallet file: " + walletPath.toString());
+      return null;
+    }
+
     OntSdk sdk = OntSdk.getInstance();
 
     OntNetworkConfig networkConfig = OntNetworkConfig.getInstance(project);
     sdk.setRpc(networkConfig.getRpcAddr());
 
-    OntPunicaConfig punicaConfig = OntPunicaConfig.getInstance(project);
-    sdk.openWalletFile(punicaConfig.getWalletPath().toString());
+    sdk.openWalletFile(walletPath.toString());
     return sdk;
   }
 
   public Object deploy(String code) throws Exception {
     OntSdk sdk = prepareSdk(project);
+
+    if (sdk == null) return null;
 
     Transaction tx = sdk.vm().makeDeployCodeTransaction(
         code, needStorage, name, version, author, email, desc, payer, gasLimit, gasPrice);
@@ -137,6 +150,18 @@ public class OntDeployConfig {
 
   public static Object sendTx(Project project, Transaction tx, boolean preExec, boolean wait, String payer, String pwd) throws Exception {
     OntSdk sdk = prepareSdk(project);
+    if (sdk == null) return null;
+
+    try {
+      sdk.getWalletMgr().getAccount(payer, pwd);
+    } catch (Exception e) {
+      e.printStackTrace();
+      OntNotifier notifier = OntNotifier.getInstance(project);
+      notifier.notifyError("Ontology", "Unable to get account: " + payer +
+          ", please make sure the account is listed in wallet file and the specified password is right");
+      return null;
+    }
+
     sdk.signTx(tx, new Account[][]{{sdk.getWalletMgr().getAccount(payer, pwd)}});
     String txHex = Helper.toHexString(tx.toArray());
     if (wait) {
