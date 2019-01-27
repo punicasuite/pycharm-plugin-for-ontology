@@ -25,6 +25,7 @@
 .editor {
   width: 100%;
   position: relative;
+  border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   height: 80vh;
 }
@@ -180,4 +181,9 @@ input {
 button {
   border: 1px solid #408af1;
   background: #d9e8fb;
+}
+
+input[readonly] {
+  color: #ccc;
+  cursor: not-allowed;
 }
