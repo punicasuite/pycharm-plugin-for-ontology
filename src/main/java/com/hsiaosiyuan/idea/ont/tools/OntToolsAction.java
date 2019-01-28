@@ -18,6 +18,6 @@ public class OntToolsAction extends AnAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     OntToolsDialogWrap dialog = new OntToolsDialogWrap();
-    dialog.showAndWait();
+    dialog.showNonblock();
   }
 }

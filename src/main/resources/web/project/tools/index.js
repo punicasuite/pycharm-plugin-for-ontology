@@ -24,8 +24,6 @@ Ext.onReady(function() {
 
   var formPanel = new Ext.FormPanel({
     labelWidth: 75,
-    frame: true,
-    title: "Ontology Tools",
     bodyStyle: "padding:5px 5px 0",
     autoHeight: true,
     width: Ext.getBody().getViewSize().width - getScrollbarWidth(),

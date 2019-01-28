@@ -70,11 +70,10 @@ public abstract class OntWebView extends JPanel {
     });
   }
 
-  public void showAndWait() {
-    if (weakDialog != null && weakDialog.get() != null) return;
+  private JDialog makeDialog() {
+    if (weakDialog != null && weakDialog.get() != null) return null;
 
     JDialog dialog = new JDialog();
-    dialog.setModal(true);
 
     dialog.getContentPane().add(this);
     dialog.setTitle(getTitle());
@@ -82,6 +81,24 @@ public abstract class OntWebView extends JPanel {
     dialog.setMinimumSize(new Dimension(640, 480));
 
     weakDialog = new WeakReference<>(dialog);
+
+    return dialog;
+  }
+
+  public void showAndWait() {
+    JDialog dialog = makeDialog();
+    if (dialog == null) return;
+
+    dialog.setModal(true);
+    dialog.setLocationRelativeTo(null);
+    dialog.setVisible(true);
+  }
+
+  public void showNonblock() {
+    JDialog dialog = makeDialog();
+    if (dialog == null) return;
+
+    dialog.setModal(false);
     dialog.setLocationRelativeTo(null);
     dialog.setVisible(true);
   }
