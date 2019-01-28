@@ -51,7 +51,7 @@ public class OntModuleSettingsAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    OntProjSettingsDialogWrap dialog = new OntProjSettingsDialogWrap(e.getProject());
+    OntProjectSettingsDialogWrap dialog = new OntProjectSettingsDialogWrap(e.getProject());
     dialog.showAndWait();
   }
 }

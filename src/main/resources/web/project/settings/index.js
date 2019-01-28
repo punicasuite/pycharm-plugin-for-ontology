@@ -29,17 +29,13 @@ Ext.onReady(function() {
 
   window.showErr = showErr;
 
-  var form = {
-    wallet: null
-  };
-
   function updateWallet(path) {
     if (!/\.json$/.test(path)) {
       showErr("Invalid wallet file.");
       return false;
     }
 
-    var wallet = java.call("_settings_", "getWalletJson", [path]);
+    var wallet = java.call("_ontSettings_", "getWalletJson", [path]);
     if (wallet === "") {
       showErr("Unable to read wallet file.");
       return false;
@@ -58,8 +54,7 @@ Ext.onReady(function() {
       return false;
     }
 
-    form.wallet = wallet;
-    updatePayers();
+    updatePayers(wallet);
     return true;
   }
 
@@ -80,7 +75,7 @@ Ext.onReady(function() {
   };
 
   var loadNetwork = function() {
-    var cfg = java.call("_settings_", "getNetworkConfigs");
+    var cfg = java.call("_ontSettings_", "getNetworkConfigs");
     if (cfg === "") {
       showErr(
         "Unable to load network configs, please ensure the file punica-config.json is readable"
@@ -113,7 +108,7 @@ Ext.onReady(function() {
   };
 
   var loadConfig = function() {
-    var cfg = java.call("_settings_", "getConfigJson");
+    var cfg = java.call("_ontSettings_", "getConfigJson");
     try {
       cfg = JSON.parse(cfg);
     } catch (e) {
@@ -133,11 +128,15 @@ Ext.onReady(function() {
     getField("invoke-gas-limit").setValue(cfg.invoke.gasLimit);
     getField("invoke-gas-price").setValue(cfg.invoke.gasPrice);
     getField("invoke-payer").setValue(cfg.invoke.payer);
+
+    if (cfg.debug.ontdev) {
+      getField("ontdev-path").setValue(cfg.debug.ontdev);
+    }
   };
 
-  function updatePayers() {
+  function updatePayers(wallet) {
     var records = [];
-    var accounts = form.wallet.accounts;
+    var accounts = wallet.accounts;
     accounts.forEach(function(acc) {
       records.push([acc.address, acc.address]);
     });
@@ -153,6 +152,10 @@ Ext.onReady(function() {
   };
 
   var kUrlRegexp = /^(?:(ws|wss|http|https):)\/\/([a-zA-Z0-9.-]+)(?::(\d+))$/;
+
+  var validateOntdev = function(path) {
+    return java.call("_ontSettings_", "isOntdevValid", [path]);
+  };
 
   var formPanel = new Ext.FormPanel({
     labelWidth: 75,
@@ -180,15 +183,8 @@ Ext.onReady(function() {
                 xtype: "textfield",
                 name: "wallet-file",
                 width: 230,
-                listeners: {
-                  blur: function(c) {
-                    form.wallet = null;
-                    c.clearInvalid();
-                    var path = c.getValue();
-                    if (!updateWallet(path)) {
-                      c.markInvalid("Invalid wallet file.");
-                    }
-                  }
+                validator: function(v) {
+                  return updateWallet(v);
                 }
               },
               {
@@ -198,15 +194,14 @@ Ext.onReady(function() {
                 width: 30,
                 onClick: function() {
                   var input = getField("wallet-file");
-                  input.clearInvalid();
-
-                  java.call("_settings_", "chooseWalletFile", function(path) {
-                    form.wallet = null;
-                    input.setValue(path);
-                    if (!updateWallet(path)) {
-                      input.markInvalid("Invalid wallet file.");
+                  java.call(
+                    "_ontSettings_",
+                    "chooseFile",
+                    ["Choose Wallet File"],
+                    function(path) {
+                      input.setValue(path);
                     }
-                  });
+                  );
                 }
               }
             ]
@@ -321,6 +316,53 @@ Ext.onReady(function() {
             }
           }
         ]
+      },
+      {
+        xtype: "fieldset",
+        title: "Debug",
+        labelAlign: "top",
+        collapsible: true,
+        autoHeight: true,
+        defaults: { width: 280 },
+        defaultType: "textfield",
+        items: [
+          {
+            xtype: "compositefield",
+            fieldLabel: "Ontdev",
+            tips: "The path of ontdev, get it via `npm install -g ontdev`",
+            labelAlign: "top",
+            items: [
+              {
+                xtype: "textfield",
+                name: "ontdev-path",
+                width: 230,
+                validator: function(v) {
+                  v = v.trim();
+                  if (v === "") return true;
+
+                  return validateOntdev(v);
+                }
+              },
+              {
+                xtype: "button",
+                name: "btn-choose-wallet",
+                text: "Choose",
+                width: 30,
+                onClick: function() {
+                  var input = getField("ontdev-path");
+                  java.call(
+                    "_ontSettings_",
+                    "chooseFile",
+                    ["Choose Ontdev"],
+                    function(path) {
+                      input.setValue(path);
+                    }
+                  );
+                }
+              }
+            ]
+          }
+        ]
       }
     ],
 
@@ -328,13 +370,13 @@ Ext.onReady(function() {
       {
         text: "Save",
         onClick: function() {
-          var form = formPanel.getForm();
-          if (!form.isValid()) {
+          var formCmp = formPanel.getForm();
+          if (!formCmp.isValid()) {
             showErr("Please fix error fields");
             return;
           }
 
-          var values = form.getValues();
+          var values = formCmp.getValues();
           var url = values["network-private"].match(kUrlRegexp);
           var scheme = url[1];
           var host = url[2];
@@ -342,13 +384,13 @@ Ext.onReady(function() {
           values["network-private-host"] = scheme + "://" + host;
           values["network-private-port"] = parseInt(port);
 
-          java.call("_settings_", "save", [values]);
+          java.call("_ontSettings_", "save", [values]);
         }
       },
       {
         text: "Cancel",
         onClick: function() {
-          java.call("_settings_", "cancel");
+          java.call("_ontSettings_", "cancel");
         }
       }
     ],

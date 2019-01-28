@@ -1,6 +1,5 @@
 package com.hsiaosiyuan.idea.ont.punica;
 
-import com.hsiaosiyuan.idea.ont.module.OntModuleBuilder;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
@@ -58,7 +57,6 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
       reloadInvokeConfig(evt);
       reloadNetworkConfig(evt);
     } catch (IOException e) {
-      if (OntModuleBuilder.getIsBuilding()) return;
       e.printStackTrace();
     }
   }

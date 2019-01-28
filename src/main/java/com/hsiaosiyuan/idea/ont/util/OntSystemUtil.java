@@ -22,11 +22,6 @@ public class OntSystemUtil {
   public static ProcessOutput getProcessOutput(final int timeout, @NotNull final String workDir,
                                                @NotNull final String exePath,
                                                @NotNull final String... arguments) throws ExecutionException {
-    if (!new File(workDir).isDirectory()
-        || (!new File(exePath).canExecute()
-        && !exePath.equals("java"))) {
-      return new ProcessOutput();
-    }
 
     final GeneralCommandLine cmd = new GeneralCommandLine();
     cmd.setWorkDirectory(workDir);

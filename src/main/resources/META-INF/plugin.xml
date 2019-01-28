@@ -46,7 +46,7 @@
     <actions>
         <action id="com.hsiaosiyuan.action.CompileAction"
                 class="com.hsiaosiyuan.idea.ont.run.OntCompileAction"
-                text="Compile contracts"
+                text="Compile contract"
                 description="Compile ontology smart contracts">
             <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
         </action>

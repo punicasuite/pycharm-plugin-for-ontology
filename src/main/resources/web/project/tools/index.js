@@ -62,7 +62,7 @@ Ext.onReady(function() {
                 text: "Hex string => String",
                 onClick: function() {
                   var hex = getField("str-conv-hex").getValue();
-                  var str = java.call("_convertor_", "hexStrToStr", [hex]);
+                  var str = java.call("_ontConvertor_", "hexStrToStr", [hex]);
                   getField("str-conv-str").setValue(str);
                 }
               },
@@ -72,7 +72,7 @@ Ext.onReady(function() {
                 text: "String => Hex string",
                 onClick: function() {
                   var str = getField("str-conv-str").getValue();
-                  var hex = java.call("_convertor_", "strToHexStr", [str]);
+                  var hex = java.call("_ontConvertor_", "strToHexStr", [str]);
                   getField("str-conv-hex").setValue(hex);
                 }
               }
@@ -113,7 +113,7 @@ Ext.onReady(function() {
                 text: "Script hash => Address",
                 onClick: function() {
                   var hash = getField("addr-conv-hash").getValue();
-                  var addr = java.call("_convertor_", "scriptHashToAddress", [
+                  var addr = java.call("_ontConvertor_", "scriptHashToAddress", [
                     hash
                   ]);
                   getField("addr-conv-addr").setValue(addr);
@@ -125,7 +125,7 @@ Ext.onReady(function() {
                 text: "Address => Script hash",
                 onClick: function() {
                   var addr = getField("addr-conv-addr").getValue();
-                  var hash = java.call("_convertor_", "addressToScriptHash", [
+                  var hash = java.call("_ontConvertor_", "addressToScriptHash", [
                     addr
                   ]);
                   getField("addr-conv-hash").setValue(hash);
@@ -168,7 +168,7 @@ Ext.onReady(function() {
                 text: "Hex String => Number",
                 onClick: function() {
                   var hex = getField("num-conv-hex").getValue();
-                  var num = java.call("_convertor_", "hexStrToNumber", [hex]);
+                  var num = java.call("_ontConvertor_", "hexStrToNumber", [hex]);
                   getField("num-conv-num").setValue(num);
                 }
               },
@@ -178,7 +178,7 @@ Ext.onReady(function() {
                 text: "Number => Hex String",
                 onClick: function() {
                   var num = getField("num-conv-num").getValue();
-                  var hex = java.call("_convertor_", "numberToHexStr", [num]);
+                  var hex = java.call("_ontConvertor_", "numberToHexStr", [num]);
                   getField("num-conv-hex").setValue(hex);
                 }
               }
@@ -219,7 +219,7 @@ Ext.onReady(function() {
                 text: "BigEndian => LittleEndian",
                 onClick: function() {
                   var be = getField("endian-conv-be").getValue();
-                  var le = java.call("_convertor_", "reverseBytes", [be]);
+                  var le = java.call("_ontConvertor_", "reverseBytes", [be]);
                   getField("endian-conv-le").setValue(le);
                 }
               },
@@ -229,7 +229,7 @@ Ext.onReady(function() {
                 text: "LittleEndian => BigEndian",
                 onClick: function() {
                   var le = getField("endian-conv-le").getValue();
-                  var be = java.call("_convertor_", "reverseBytes", [le]);
+                  var be = java.call("_ontConvertor_", "reverseBytes", [le]);
                   getField("endian-conv-be").setValue(be);
                 }
               }
@@ -270,7 +270,7 @@ Ext.onReady(function() {
                 text: "Hex string => Byte array",
                 onClick: function() {
                   var hex = getField("bytearray-conv-hex").getValue();
-                  var ba = java.call("_convertor_", "hexStrToBa", [hex]);
+                  var ba = java.call("_ontConvertor_", "hexStrToBa", [hex]);
                   getField("bytearray-conv-ba").setValue(ba);
                 }
               },
@@ -280,7 +280,7 @@ Ext.onReady(function() {
                 text: "Byte array => Hex string",
                 onClick: function() {
                   var ba = getField("bytearray-conv-ba").getValue();
-                  var hex = java.call("_convertor_", "baToHexStr", [ba]);
+                  var hex = java.call("_ontConvertor_", "baToHexStr", [ba]);
                   getField("bytearray-conv-hex").setValue(hex);
                 }
               }

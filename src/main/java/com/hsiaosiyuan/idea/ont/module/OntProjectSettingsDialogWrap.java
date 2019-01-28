@@ -2,12 +2,13 @@ package com.hsiaosiyuan.idea.ont.module;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.OntPunicaConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
+import com.hsiaosiyuan.idea.ont.sdk.OntSdkSettings;
 import com.hsiaosiyuan.idea.ont.webview.OntWebView;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileChooser.FileChooser;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
@@ -25,12 +26,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class OntProjSettingsDialogWrap extends OntWebView {
+public class OntProjectSettingsDialogWrap extends OntWebView {
 
   private Project project;
   private Settings settings;
 
-  public OntProjSettingsDialogWrap(Project project) {
+  public OntProjectSettingsDialogWrap(Project project) {
     super();
     this.project = project;
     settings = new Settings();
@@ -54,7 +55,7 @@ public class OntProjSettingsDialogWrap extends OntWebView {
       if (newState == Worker.State.SUCCEEDED) {
         JSObject win = (JSObject) webEngine.executeScript("window");
 
-        win.setMember("_settings_", settings);
+        win.setMember("_ontSettings_", settings);
         System.out.println(win.getMember("loadNetwork"));
         win.call("loadNetwork", settings.getNetworkConfigs());
       }
@@ -63,10 +64,10 @@ public class OntProjSettingsDialogWrap extends OntWebView {
 
   public class Settings {
 
-    public void chooseWalletFile(String method) {
+    public void chooseFile(String title, String method) {
       FileChooserDescriptor descriptor = FileChooserDescriptorFactory
           .createSingleFileNoJarsDescriptor()
-          .withTitle("Choose Wallet File");
+          .withTitle(title);
 
       SwingUtilities.invokeLater(() -> {
         FileChooser.chooseFile(descriptor, null, null, file -> {
@@ -105,6 +106,14 @@ public class OntProjSettingsDialogWrap extends OntWebView {
       }
       cfg.put("invoke", invoke);
 
+      JSONObject debug = new JSONObject();
+      String ontDevPath = OntSdkSettings.getInstance().PUNICA_BIN;
+      if (ontDevPath == null || ontDevPath.equals("")) {
+        ontDevPath = OntPunica.getSuggestPath();
+      }
+      debug.put("ontdev", ontDevPath);
+      cfg.put("debug", debug);
+
       return JSON.toJSONString(cfg);
     }
 
@@ -128,6 +137,11 @@ public class OntProjSettingsDialogWrap extends OntWebView {
       } catch (IOException e) {
         return "";
       }
+    }
+
+    public Boolean isOntdevValid(String path) {
+      OntPunica punica = new OntPunica(path);
+      return punica.exist();
     }
 
     public void cancel() {
@@ -158,6 +172,10 @@ public class OntProjSettingsDialogWrap extends OntWebView {
         invokeConfig.gasPrice = Integer.valueOf((String) cfg.getMember("invoke-gas-price"));
         invokeConfig.defaultPayer = (String) cfg.getMember("invoke-payer");
         invokeConfig.save();
+
+        String ontdevPath = (String) cfg.getMember("ontdev-path");
+        ontdevPath = ontdevPath.trim();
+        if (!ontdevPath.equals("")) OntSdkSettings.getInstance().PUNICA_BIN = ontdevPath;
 
         closeDialog();
       } catch (Exception e) {

@@ -29,8 +29,7 @@ public class OntToolsDialogWrap extends OntWebView {
     webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
       if (newState == Worker.State.SUCCEEDED) {
         JSObject win = (JSObject) webEngine.executeScript("window");
-
-        win.setMember("_convertor_", new Convertor());
+        win.setMember("_ontConvertor_", new Convertor());
       }
     });
   }

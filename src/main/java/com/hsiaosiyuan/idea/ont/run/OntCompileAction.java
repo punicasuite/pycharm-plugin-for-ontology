@@ -1,9 +1,10 @@
 package com.hsiaosiyuan.idea.ont.run;
 
 import com.hsiaosiyuan.idea.ont.OntIcons;
+import com.hsiaosiyuan.idea.ont.punica.OntCompileProcessHandler;
 import com.hsiaosiyuan.idea.ont.punica.OntPunica;
-import com.hsiaosiyuan.idea.ont.punica.OntPunicaFactory;
-import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.ProcessAdapter;
+import com.intellij.execution.process.ProcessEvent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -36,12 +37,19 @@ public class OntCompileAction extends AnAction {
     Project project = e.getProject();
     if (project == null) return;
 
-    GeneralCommandLine cmd = OntPunicaFactory.create().makeCompileCmd(file.getPath());
+    OntCompileProcessHandler compileProcess = new OntCompileProcessHandler();
 
-    OntPunica.startCmdProcess(cmd, project, evt -> {
-      ApplicationManager.getApplication().invokeLater(() -> {
-        VirtualFileManager.getInstance().refreshWithoutFileWatcher(false);
-      });
+    compileProcess.addProcessListener(new ProcessAdapter() {
+      @Override
+      public void processTerminated(@NotNull ProcessEvent event) {
+        super.processTerminated(event);
+        ApplicationManager.getApplication().invokeLater(() -> {
+          VirtualFileManager.getInstance().refreshWithoutFileWatcher(false);
+        });
+      }
     });
+
+    OntPunica.startProcess(compileProcess, project);
+    compileProcess.start(project, file.getPath());
   }
 }

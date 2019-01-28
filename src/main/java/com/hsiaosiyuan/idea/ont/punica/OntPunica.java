@@ -5,21 +5,19 @@ import com.github.ontio.network.exception.ConnectorException;
 import com.github.ontio.network.exception.RpcException;
 import com.github.ontio.sdk.exception.SDKException;
 import com.hsiaosiyuan.idea.ont.run.OntConsoleToolWindowFactory;
-import com.hsiaosiyuan.idea.ont.run.OntNotifier;
-import com.hsiaosiyuan.idea.ont.run.OntRunCmdHandler;
+import com.hsiaosiyuan.idea.ont.run.OntProcessHandler;
 import com.hsiaosiyuan.idea.ont.util.OntSystemUtil;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.process.*;
+import com.intellij.execution.process.ProcessOutput;
+import com.intellij.execution.process.ProcessTerminatedListener;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.impl.ContentImpl;
-import com.intellij.util.Consumer;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -83,29 +81,13 @@ public class OntPunica {
       if (out.getExitCode() != 0) return "";
 
       List<String> lines = out.getStdoutLines(true);
+      if (lines.size() == 1) {
+        return lines.get(0);
+      }
       return lines.size() == 2 ? lines.get(1) : "";
     } catch (ExecutionException ignored) {
     }
     return "";
-  }
-
-  public GeneralCommandLine makeInitCmd(String wd) {
-    GeneralCommandLine commandLine = new OntCommandLine();
-    commandLine.setExePath(bin.getAbsolutePath());
-    commandLine.addParameter("project");
-    commandLine.addParameter("-i");
-    commandLine.addParameters(wd);
-    return commandLine;
-  }
-
-  public GeneralCommandLine makeCompileCmd(String fileOrDir) {
-    GeneralCommandLine commandLine = new OntCommandLine();
-
-    commandLine.setExePath(bin.getAbsolutePath());
-    commandLine.addParameter("project");
-    commandLine.addParameter("-c");
-    commandLine.addParameters(fileOrDir);
-    return commandLine;
   }
 
   public GeneralCommandLine makeDebugCmd(String ticket) {
@@ -130,31 +112,11 @@ public class OntPunica {
     return consoleView;
   }
 
-  public static void startCmdProcess(GeneralCommandLine cmd, Project project, @Nullable Consumer<ProcessEvent> onTerminated) {
-    OntNotifier notifier = OntNotifier.getInstance(project);
-    OSProcessHandler osProcessHandler;
-    try {
-      osProcessHandler = new OntRunCmdHandler(cmd.createProcess(), cmd.getCommandLineString());
-    } catch (ExecutionException err) {
-      notifier.notifyError("Ontdev Error", err);
-      return;
-    }
-
-    if (onTerminated != null) {
-      osProcessHandler.addProcessListener(new ProcessAdapter() {
-        @Override
-        public void processTerminated(@NotNull ProcessEvent event) {
-          onTerminated.consume(event);
-        }
-      });
-    }
-
-    ProcessTerminatedListener.attach(osProcessHandler, project);
-
-    ConsoleView consoleView = makeConsoleView(project, "Ontdev");
-    consoleView.attachToProcess(osProcessHandler);
-
-    osProcessHandler.startNotify();
+  public static void startProcess(OntProcessHandler processHandler, Project project) {
+    ProcessTerminatedListener.attach(processHandler, project);
+    ConsoleView consoleView = makeConsoleView(project, "Ontology");
+    consoleView.attachToProcess(processHandler);
+    processHandler.startNotify();
   }
 
   public static boolean isContractDeployed(String rpcAddress, String codeHash) throws SDKException, ConnectorException, IOException {
