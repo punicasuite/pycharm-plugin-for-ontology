@@ -10,7 +10,6 @@ import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.hsiaosiyuan.idea.ont.run.OntNotifier;
 import com.hsiaosiyuan.idea.ont.run.OntProcessHandler;
-import com.hsiaosiyuan.idea.ont.webview.OntInvokeDialogWrap;
 import com.intellij.execution.process.ProcessOutputTypes;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;

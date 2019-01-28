@@ -1,4 +1,4 @@
-package com.hsiaosiyuan.idea.ont.webview;
+package com.hsiaosiyuan.idea.ont.invoke;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -6,6 +6,7 @@ import com.github.ontio.smartcontract.neovm.abi.AbiFunction;
 import com.github.ontio.smartcontract.neovm.abi.Parameter;
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
+import com.hsiaosiyuan.idea.ont.webview.OntWebView;
 import javafx.concurrent.Worker;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;

@@ -1,15 +1,12 @@
 package com.hsiaosiyuan.idea.ont.module;
 
 import com.hsiaosiyuan.idea.ont.OntIcons;
-import com.hsiaosiyuan.idea.ont.webview.OntProjSettingsDialogWrap;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
-
-import java.nio.file.Paths;
 
 public class OntModuleSettingsAction extends AnAction {
 
