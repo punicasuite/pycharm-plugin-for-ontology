@@ -345,7 +345,7 @@ Ext.onReady(function() {
               },
               {
                 xtype: "button",
-                name: "btn-choose-wallet",
+                name: "btn-choose-ontdev",
                 text: "Choose",
                 width: 30,
                 onClick: function() {
