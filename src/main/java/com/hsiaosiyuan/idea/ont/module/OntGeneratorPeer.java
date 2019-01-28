@@ -47,7 +47,10 @@ public class OntGeneratorPeer implements ProjectGeneratorPeer<OntProjectSettingD
   @Override
   public ValidationInfo validate() {
     AtomicBoolean ok = new AtomicBoolean(false);
-    String path = settings.getPath();
+    String path = settings.getPath().trim();
+
+    if (path.equals("")) return null;
+
     ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
       ProgressManager.getInstance().getProgressIndicator().setIndeterminate(true);
       ok.set(new OntPunica(path).exist());
