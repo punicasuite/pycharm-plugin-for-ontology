@@ -29,4 +29,4 @@ If there is no need of debugging in your project then the installations of Node.
 
 You could also setup `Ontdev` after the project is created, the entry can be found by right click on the project root directory then click **Project settings**:
 
-<img height="460" src="./doc/imgs/settings.png" />
+<img width="450" src="./doc/imgs/settings.png" />
