@@ -62,6 +62,8 @@ public class OntPunicaConfig {
   }
 
   public Path getWalletPath() {
+    Path path = Paths.get(defaultWallet);
+    if (path.isAbsolute()) return path;
     return Paths.get(Objects.requireNonNull(project.getBasePath())).resolve("./wallet/" + defaultWallet).normalize();
   }
 }

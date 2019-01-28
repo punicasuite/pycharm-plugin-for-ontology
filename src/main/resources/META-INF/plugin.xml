@@ -56,5 +56,11 @@
                 description="Deploy ontology smart contract">
             <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
         </action>
+        <action id="com.hsiaosiyuan.action.ModuleSettingsAction"
+                class="com.hsiaosiyuan.idea.ont.module.OntModuleSettingsAction"
+                text="Project settings"
+                description="Change settings of your project">
+            <add-to-group group-id="RevealGroup" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

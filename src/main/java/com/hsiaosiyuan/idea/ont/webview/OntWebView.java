@@ -2,6 +2,7 @@ package com.hsiaosiyuan.idea.ont.webview;
 
 import com.sun.javafx.application.PlatformImpl;
 import com.sun.javafx.webkit.WebConsoleListener;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -90,5 +92,15 @@ public abstract class OntWebView extends JPanel {
 
     d.setVisible(false);
     weakDialog.clear();
+  }
+
+  public void callJS(String method, Object... arguments) {
+    Platform.runLater(() -> {
+      assert webEngine != null;
+      Object methodRef = webEngine.executeScript("window." + method);
+      assert methodRef != null;
+      JSObject win = (JSObject) webEngine.executeScript("window");
+      win.call(method, arguments);
+    });
   }
 }
