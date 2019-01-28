@@ -9,6 +9,8 @@ Adds support for Ontology Smart Contract Development:
 
 ## Installation
 
+### Includes debugging
+
 1. Install Node.js, by using your favorite way such as [Official Installation Package](https://nodejs.org/en/) or [Node Version Manager](https://github.com/creationix/nvm) etc.
 
 2. Install `Ontdev` via Command Line `npm install -g ontdev`
@@ -21,5 +23,10 @@ Adds support for Ontology Smart Contract Development:
    
       <img width="450" src="./doc/imgs/install-1.png" />
 
+### Without debugging
 
-4. when the project creating wizard appears, it will ask you where does the `ontdev` locate at. By default if ontdev is installed correctly, the path will be detected automatically otherwise you could find it out manually via `which ontdev` on *nix or `where.exe ontdev` on windows.
+If there is no need of debugging in your project then the installations of Node.js environment and `Ontdev` are skippable. Just begin your installing from the former step 3.
+
+You could also setup `Ontdev` after the project is created, the entry can be found by right click on the project root directory then click **Project settings**:
+
+<img width="450" src="./doc/imgs/settings.png" />
