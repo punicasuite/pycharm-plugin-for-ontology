@@ -30,3 +30,21 @@ If there is no need of debugging in your project then the installations of Node.
 You could also setup `Ontdev` after the project is created, the entry can be found by right click on the project root directory then click **Project settings**:
 
 <img width="450" src="./doc/imgs/settings.png" />
+
+## Tools
+
+This plugin provides conversion between various literals:
+
+* String <=> Hex string
+
+* Address <=> Script hash
+
+* Number <=> Hex string
+
+* Byte array <=> Hex string
+
+* Endian conversion
+
+The entry could be found via **Tools -> Ontology Tools**:
+
+<img width="450" src="./doc/imgs/tools.png" />
