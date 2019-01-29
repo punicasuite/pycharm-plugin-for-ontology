@@ -18,6 +18,9 @@ dependencies {
     compile('com.alibaba:fastjson:1.2.54')
     compile('com.github.ontio:ontology-sdk-java:1.0.9')
     compile('io.socket:socket.io-client:1.0.0')
+    compile('org.eclipse.jgit:org.eclipse.jgit:5.2.1.201812262042-r') {
+        exclude group: 'org.slf4j'
+    }
 }
 
 intellij {

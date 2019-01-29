@@ -2,7 +2,6 @@ package com.hsiaosiyuan.idea.ont.run;
 
 import com.hsiaosiyuan.idea.ont.abi.AbiFile;
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
-import com.hsiaosiyuan.idea.ont.deploy.OntDeployProcessHandler;
 import com.hsiaosiyuan.idea.ont.invoke.OntInvokeProcessHandler;
 import com.hsiaosiyuan.idea.ont.punica.OntPunica;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
@@ -29,19 +28,13 @@ public class OntRunAction extends AnAction {
     Project project = e.getProject();
     if (project == null) return;
 
+    OntNotifier notifier = OntNotifier.getInstance(project);
     if (!isDeployed(project)) {
-      deploy(project);
+      notifier.notifyMinorWarning("Ontology", "Please deploy the contract before you could run it");
       return;
     }
 
     invoke(project);
-  }
-
-  private void deploy(Project project) {
-    OntDeployProcessHandler handler = new OntDeployProcessHandler();
-    ConsoleView consoleView = OntPunica.makeConsoleView(project, "Deploy");
-    consoleView.attachToProcess(handler);
-    handler.start(project, src);
   }
 
   private void invoke(Project project) {

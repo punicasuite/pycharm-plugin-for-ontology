@@ -53,6 +53,13 @@ public class AbiFile {
     return Paths.get(abiPath).getParent().resolve("../" + filename + ".py").normalize().toString();
   }
 
+  public static String avmPath2SrcPath(String avmPath) {
+    Path path = Paths.get(avmPath);
+    String filename = path.getFileName().toString();
+    filename = filename.substring(0, filename.length() - 4);
+    return Paths.get(avmPath).getParent().resolve("../" + filename + ".py").normalize().toString();
+  }
+
   public static String srcPath2AvmPath(String srcPath) {
     String filename = extractSrcFilename(srcPath);
     return Paths.get(srcPath).getParent().resolve("./build/" + filename + ".avm").normalize().toString();

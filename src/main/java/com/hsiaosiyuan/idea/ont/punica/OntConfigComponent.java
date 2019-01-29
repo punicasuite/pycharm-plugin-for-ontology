@@ -1,7 +1,7 @@
 package com.hsiaosiyuan.idea.ont.punica;
 
-import com.hsiaosiyuan.idea.ont.module.OntModuleBuilder;
 import com.hsiaosiyuan.idea.ont.punica.config.OntDeployConfig;
+import com.hsiaosiyuan.idea.ont.punica.config.OntInvokeConfig;
 import com.hsiaosiyuan.idea.ont.punica.config.OntNetworkConfig;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.List;
 
 public class OntConfigComponent implements ProjectComponent, BulkFileListener {
@@ -55,9 +54,9 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
     try {
       reloadConfig(evt);
       reloadDeployConfig(evt);
+      reloadInvokeConfig(evt);
       reloadNetworkConfig(evt);
     } catch (IOException e) {
-      if (OntModuleBuilder.getIsBuilding()) return;
       e.printStackTrace();
     }
   }
@@ -68,10 +67,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntPunicaConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntPunicaConfig.getInstance(project).load();
+    OntPunicaConfig.getInstance(project).reload(evt.getPath());
   }
 
   private void reloadDeployConfig(VFileEvent evt) throws IOException {
@@ -80,10 +76,16 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntDeployConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
+    OntDeployConfig.getInstance(project).reload(evt.getPath());
+  }
 
-    OntDeployConfig.getInstance(project).load();
+  private void reloadInvokeConfig(VFileEvent evt) throws IOException {
+    Project project = getProjectByFile(evt.getFile());
+    if (project == null) return;
+
+    if (project.isDisposed()) return;
+
+    OntInvokeConfig.getInstance(project).reload(evt.getPath());
   }
 
   private void reloadNetworkConfig(VFileEvent evt) throws IOException {
@@ -92,10 +94,7 @@ public class OntConfigComponent implements ProjectComponent, BulkFileListener {
 
     if (project.isDisposed()) return;
 
-    Path path = OntNetworkConfig.getInstance(project).getFilePath();
-    if (!path.toString().equals(evt.getPath())) return;
-
-    OntNetworkConfig.getInstance(project).load();
+    OntNetworkConfig.getInstance(project).reload(evt.getPath());
   }
 
   @Nullable

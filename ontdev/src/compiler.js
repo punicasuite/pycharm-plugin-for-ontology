@@ -124,7 +124,7 @@ module.exports.Compiler = class Compiler {
 
     if (contractPath.endsWith(".py")) {
       type = "Python";
-      url = "https://smartxcompiler.ont.io/api/beta/python/compile";
+      url = "https://smartxcompiler.ont.io/api/v2.0/python/compile";
     } else if (contractPath.endsWith(".cs")) {
       type = "CSharp";
       url = "https://smartxcompiler.ont.io/api/v1.0/csharp/compile";

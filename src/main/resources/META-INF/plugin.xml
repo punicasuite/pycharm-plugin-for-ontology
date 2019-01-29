@@ -46,9 +46,27 @@
     <actions>
         <action id="com.hsiaosiyuan.action.CompileAction"
                 class="com.hsiaosiyuan.idea.ont.run.OntCompileAction"
-                text="Compile contracts"
+                text="Compile contract"
                 description="Compile ontology smart contracts">
             <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
+        </action>
+        <action id="com.hsiaosiyuan.action.DeployAction"
+                class="com.hsiaosiyuan.idea.ont.deploy.OntDeployAction"
+                text="Deploy contract"
+                description="Deploy ontology smart contract">
+            <add-to-group group-id="RunContextPopupGroup" anchor="first"/>
+        </action>
+        <action id="com.hsiaosiyuan.action.ModuleSettingsAction"
+                class="com.hsiaosiyuan.idea.ont.module.OntModuleSettingsAction"
+                text="Project settings"
+                description="Change settings of your project">
+            <add-to-group group-id="RevealGroup" anchor="last"/>
+        </action>
+        <action id="com.hsiaosiyuan.action.ToolsAction"
+                class="com.hsiaosiyuan.idea.ont.tools.OntToolsAction"
+                text="Ontology Tools"
+                description="Tools for ontology smart contract development">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>

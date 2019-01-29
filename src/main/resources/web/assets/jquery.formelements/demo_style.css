@@ -1,0 +1,24 @@
+* {
+    box-sizing:border-box;
+}
+
+body {
+	margin:0px;
+	padding:0px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#333;
+    background-color: #eee;
+}
+
+.container {
+    background-color: #fff;
+    margin:50px auto;
+    width: 960px;
+    outline: #ddd 1px solid;
+}
+
+.section {
+    padding:20px;
+    border-bottom: 1px solid #eee;
+}

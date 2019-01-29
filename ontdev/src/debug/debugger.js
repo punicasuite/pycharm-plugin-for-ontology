@@ -132,7 +132,6 @@ module.exports.Debugger = class Debugger {
 
   async onInspect(data) {
     const ip = data.instructionPointer;
-    // console.log(ip + ' ' + data.opName);
 
     if (data.contractAddress.toHexString() !== this.debugInfo.avm.hash) {
       // if not current contract then skip
@@ -147,7 +146,7 @@ module.exports.Debugger = class Debugger {
 
     this.checkDebugBlocks(data, debug);
 
-    if (debug.start === ip) {
+    if (debug.start === ip) { 
       // check breakpoint on block start
       const bp = this.checkBreakpoint(debug);
       if (bp !== false) {

@@ -10,17 +10,18 @@ import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
 import com.intellij.xdebugger.frame.XSuspendContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 public class OntDebugProcess extends XDebugProcess {
   private OntLineBreakpointHandler lineBreakpointHandler;
   private ConsoleView consoleView;
   private OntDebugAgent agent;
 
-  public OntDebugProcess(@NotNull XDebugSession session, @NotNull String src, @NotNull String method) {
+  public OntDebugProcess(@NotNull XDebugSession session, @NotNull String src, @NotNull String method, @NotNull JSONObject params) {
     super(session);
 
     consoleView = (ConsoleView) super.createConsole();
-    agent = new OntDebugAgent(session, consoleView, src, method);
+    agent = new OntDebugAgent(session, consoleView, src, method, params);
     lineBreakpointHandler = new OntLineBreakpointHandler(agent);
 
     startAgent();

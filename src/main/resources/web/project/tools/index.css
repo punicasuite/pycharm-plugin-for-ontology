@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0px; /* remove scrollbar space */
+  background: transparent; /* optional: just make scrollbar invisible */
+}
+
+.tips {
+  color: #999;
+  padding: 5px 0;
+}
+
+.tips i {
+  text-decoration: underline;
+  font-style: normal;
+}

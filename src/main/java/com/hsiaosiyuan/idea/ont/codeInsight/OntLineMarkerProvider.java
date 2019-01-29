@@ -1,15 +1,12 @@
 package com.hsiaosiyuan.idea.ont.codeInsight;
 
 import com.hsiaosiyuan.idea.ont.abi.AbiIndexManager;
-import com.hsiaosiyuan.idea.ont.debug.OntDebugAction;
 import com.hsiaosiyuan.idea.ont.run.OntRunAction;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -63,10 +60,6 @@ public class OntLineMarkerProvider implements LineMarkerProvider {
       String src = element.getContainingFile().getVirtualFile().getPath();
       String method = element.getText();
       final AnAction runAction = new OntRunAction(src, method);
-      final AnAction debugAction = new OntDebugAction(src, method);
-
-      final DefaultActionGroup group = new DefaultActionGroup();
-      group.add(debugAction);
 
       LineMarkerInfo<PsiElement> info = new LineMarkerInfo<PsiElement>(
           element,
@@ -84,12 +77,6 @@ public class OntLineMarkerProvider implements LineMarkerProvider {
             @Override
             public AnAction getClickAction() {
               return runAction;
-            }
-
-            @NotNull
-            @Override
-            public ActionGroup getPopupMenuActions() {
-              return group;
             }
           };
         }

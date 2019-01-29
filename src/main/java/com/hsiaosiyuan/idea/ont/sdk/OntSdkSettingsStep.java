@@ -86,14 +86,20 @@ public class OntSdkSettingsStep extends ModuleWizardStep implements ActionListen
   @Override
   public boolean validate() throws ConfigurationException {
     String path = txPath.getText();
+    if (path != null) path = path.trim();
+
+    // if path is not set during project creating wizard just skip checking
+    // users could specify this path later via right click on project root directory
+    // and choose the Ontology Project Settings menu
     if (path == null || path.isEmpty()) {
-      throw new ConfigurationException("Please specify the path of Ontdev CLI :(");
+      return true;
     }
 
     AtomicBoolean ok = new AtomicBoolean(false);
+    String finalPath = path;
     ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
       ProgressManager.getInstance().getProgressIndicator().setIndeterminate(true);
-      ok.set(new OntPunica(path).exist());
+      ok.set(new OntPunica(finalPath).exist());
     }, "Checking...", false, myWizardContext.getProject());
 
     if (!ok.get()) throw new ConfigurationException("Unable to detect Ontdev CLI via the given path :(");

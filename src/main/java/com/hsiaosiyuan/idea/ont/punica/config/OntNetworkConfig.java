@@ -54,6 +54,12 @@ public class OntNetworkConfig {
     networks = obj.networks;
   }
 
+  public void reload(String path) throws IOException {
+    path = Paths.get(path).normalize().toString();
+    if (!getFilePath().toString().equals(path)) return;
+    load();
+  }
+
   public void save() throws IOException {
     String raw = JSON.toJSONString(this, true);
     Files.write(getFilePath(), raw.getBytes());
