@@ -15,15 +15,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class OntGeneratorPeer implements ProjectGeneratorPeer<OntProjectSettingData> {
   private OntProjectSettings settings;
-  private SettingsListener listener;
+  private String prevPath;
 
   public OntGeneratorPeer() {
     settings = new OntProjectSettings();
-
-    settings.setPathChangedListener(path -> {
-      if (listener != null)
-        listener.stateChanged(false);
-    });
   }
 
   @NotNull
@@ -49,7 +44,7 @@ public class OntGeneratorPeer implements ProjectGeneratorPeer<OntProjectSettingD
     AtomicBoolean ok = new AtomicBoolean(false);
     String path = settings.getPath().trim();
 
-    if (path.equals("")) return null;
+    if (path.equals("") || path.equals(prevPath)) return null;
 
     ProgressManager.getInstance().runProcessWithProgressSynchronously(() -> {
       ProgressManager.getInstance().getProgressIndicator().setIndeterminate(true);
@@ -60,6 +55,7 @@ public class OntGeneratorPeer implements ProjectGeneratorPeer<OntProjectSettingD
       return new ValidationInfo("The path of Ontdev CLI is invalid");
     }
 
+    prevPath = path;
     OntSdkSettings.getInstance().PUNICA_BIN = path;
     return null;
   }
@@ -76,6 +72,6 @@ public class OntGeneratorPeer implements ProjectGeneratorPeer<OntProjectSettingD
 
   @Override
   public void addSettingsListener(@NotNull SettingsListener listener) {
-    this.listener = listener;
+
   }
 }
